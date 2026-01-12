@@ -90,32 +90,6 @@ You can choose one of the following:
 
 ---
 
-## 📁 Suggested Project Structure
-
-/itians
-│── index.html
-│── login.html
-│── register.html
-│── admin/
-│ ├── dashboard.html
-│ ├── courses.html
-│ └── categories.html
-│── student/
-│ ├── home.html
-│ ├── course.html
-│ └── wishlist.html
-│── css/
-│ └── style.css
-│── js/
-├── auth.js
-├── courses.js
-├── categories.js
-├── wishlist.js
-├── admin.js
-└── utils.js
-
----
-
 ## ☁️ Deployment
 
 - Upload the entire project to **GitHub**
