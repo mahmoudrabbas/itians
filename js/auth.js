@@ -59,7 +59,7 @@ function validatename(){
     let nameregex=/^[A-Za-z\s]+$/
     
     if(name.length<3)
-     {   
+     {    
     alert("Username must be at least 3 characters");
     return false
     }
