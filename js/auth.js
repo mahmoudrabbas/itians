@@ -40,7 +40,7 @@ function loginpassword(){
     let passwordregex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
 if(!passwordregex.test(password))
 {
-  alert("Password must be 8+ characters, include uppercase, lowercase, and a number");
+  alert("*Password must be 8+ characters, include uppercase, lowercase, and a number");
   return false
 }
 return true
@@ -60,13 +60,15 @@ function validatename(){
     
     if(name.length<3)
      {    
-    alert("Username must be at least 3 characters");
+    document.getElementById("namemsg").innerHTML="*Username must be at least 3 characters"
     return false
     }
     else if(!nameregex.test(name)){
-    alert("Name must contain letters only");
-    return false
+        document.getElementById("namemsg").innerHTML="*Name must contain letters only"
+        return false
     }
+    document.getElementById("namemsg").innerHTML=""
+
 return true
     
 }
@@ -77,9 +79,10 @@ function validateemail(){
     const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 if(!gmailRegex.test(email))
 {
-    alert("not valid email")
+    document.getElementById("emailmsg").innerHTML="*not valid email"
     return false
 }
+document.getElementById("emailmsg").innerHTML=""
 return true
 
 }
@@ -93,9 +96,14 @@ function validatepassword(e){
  if(password==""||confirmpassword==""||password!==confirmpassword 
     ||!passwordregex.test(password)||!passwordregex.test(confirmpassword))
 {
-    alert("Password must be 8+ characters, include uppercase, lowercase, and a number");
+    document.getElementsByClassName("passmsg")[0].innerHTML="*Password must be 8+ characters, include uppercase, lowercase, and a number"
+    document.getElementsByClassName("passmsg")[1].innerHTML="*Password must be 8+ characters, include uppercase, lowercase, and a number"
+
     return false
 }
+document.getElementsByClassName("passmsg")[0].innerHTML=""
+document.getElementsByClassName("passmsg")[0].innerHTML=""
+
 return true
 }
 

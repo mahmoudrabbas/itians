@@ -23,16 +23,31 @@
 
         <label>Full Name</label>
         <input type="text" class="input" id="username" onblur="validatename()" required>
+        <br>
+        <span  id="namemsg"></span>
+        <br>
+        <br>
 
         <label>Email</label>
         <input type="email" class="input" id="email" onblur="validateemail()" required>
+        <br>
+        <span  id="emailmsg"></span>
+        <br>
+        <br>
 
         <label>Password</label>
         <input type="password" class="input" id="password"  required>
+        <br>
+        <span class="passmsg"></span>
+        <br>
+        <br>
 
         <label>Confirm Password</label>
         <input type="password" class="input" id="confirmpassword" onblur="validatepassword()" required>
-
+        <br>
+        <span  class="passmsg"></span>
+ <br>
+        <br>
         <button type="button" class="btn" onclick="signup(event)">Signup</button>
 
         <p class="text">
