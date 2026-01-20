@@ -1,7 +1,6 @@
 // write login validation here
 
 
-alert("s")
 
 // and write signup validation here
 function signup(){
