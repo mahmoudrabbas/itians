@@ -26,11 +26,11 @@ function login(){
         }}
     }
     if(isexist==1)
-        alert("wrong password")
+        document.getElementById("emailmsg").innerHTML="wrong password"
     else if(isexist==2)
-    alert("login successfuly")
+        document.getElementById("emailmsg").innerHTML="login successfuly"
 else if(isexist==0)
-alert("account not found ")
+    document.getElementById("emailmsg").innerHTML="account not found"
 
 }
 
@@ -40,7 +40,8 @@ function loginpassword(){
     let passwordregex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/
 if(!passwordregex.test(password))
 {
-  alert("*Password must be 8+ characters, include uppercase, lowercase, and a number");
+    document.getElementById("passmsg").innerHTML="*Password must be 8+ characters, include uppercase, lowercase, and a number"
+    
   return false
 }
 return true
