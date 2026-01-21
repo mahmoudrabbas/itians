@@ -300,7 +300,7 @@ function enrollCourse() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
 
     if (!user) {
-        alert('Please login to enroll in courses!');
+        // alert('Please login to enroll in courses!');
         window.location.href = 'login.html';
         return;
     }
@@ -309,7 +309,7 @@ function enrollCourse() {
 
     // Check if already enrolled
     if (user.courses.includes(selectedCourseId)) {
-        alert('You are already enrolled in this course!');
+        // alert('You are already enrolled in this course!');
         return;
     }
 
@@ -325,7 +325,7 @@ function enrollCourse() {
         localStorage.setItem('users', JSON.stringify(users));
     }
 
-    alert(`Successfully enrolled in ${course.title}!`);
+    // alert(`Successfully enrolled in ${course.title}!`);
     document.getElementById('courseModal').style.display = 'none';
 }
 
