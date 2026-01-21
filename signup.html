@@ -1,62 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/signup.css" />
-    <title>Signup - itians</title>
-</head>
-<style>
-    /* body {
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/css/signup.css" />
+        <title>Signup - itians</title>
+    </head>
+    <style>
+        /* body {
         padding: 40px 10px;
 
     } */
-</style>
-<body>
+    </style>
+    <body>
+        <div class="signup-card">
+            <h3 class="title">Create Account</h3>
 
-    
+            <form>
+                <label>Full Name</label>
+                <input
+                    type="text"
+                    class="input"
+                    id="username"
+                    onblur="validatename()"
+                    required
+                />
+                <br />
+                <span id="namemsg"></span>
+                <br />
+                <br />
 
-<div class="signup-card">
-    <h3 class="title">Create Account</h3>
+                <label>Email</label>
+                <input
+                    type="email"
+                    class="input"
+                    id="email"
+                    onblur="validateemail()"
+                    required
+                />
+                <br />
+                <span id="emailmsg"></span>
+                <br />
+                <br />
 
-    <form>
+                <label>Password</label>
+                <input type="password" class="input" id="password" required />
+                <br />
+                <span class="passmsg"></span>
+                <br />
+                <br />
 
-        <label>Full Name</label>
-        <input type="text" class="input" id="username" onblur="validatename()" required>
-        <br>
-        <span  id="namemsg"></span>
-        <br>
-        <br>
+                <label>Confirm Password</label>
+                <input
+                    type="password"
+                    class="input"
+                    id="confirmpassword"
+                    onblur="validatepassword()"
+                    required
+                />
+                <br />
+                <span class="passmsg"></span>
+                <br />
+                <br />
+                <button type="button" class="btn" onclick="signup(event)">
+                    Signup
+                </button>
 
-        <label>Email</label>
-        <input type="email" class="input" id="email" onblur="validateemail()" required>
-        <br>
-        <span  id="emailmsg"></span>
-        <br>
-        <br>
-
-        <label>Password</label>
-        <input type="password" class="input" id="password"  required>
-        <br>
-        <span class="passmsg"></span>
-        <br>
-        <br>
-
-        <label>Confirm Password</label>
-        <input type="password" class="input" id="confirmpassword" onblur="validatepassword()" required>
-        <br>
-        <span  class="passmsg"></span>
- <br>
-        <br>
-        <button type="button" class="btn" onclick="signup(event)">Signup</button>
-
-        <p class="text">
-            Already have an account? <a href="login.html">Login</a>
-        </p>
-    </form>
-</div>
-<script src="/js/auth.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-
-</body>
+                <p class="text">
+                    Already have an account?
+                    <a href="login.html">Login</a>
+                </p>
+            </form>
+        </div>
+        <script src="/js/auth.js"></script>
+    </body>
 </html>

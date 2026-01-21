@@ -1,88 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itians - E-Learning Platform</title>
-    <link rel="stylesheet" href="/css/styles.css" />
-</head>
-<style>
-    /* body {
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Itians - E-Learning Platform</title>
+        <link rel="stylesheet" href="/css/styles.css" />
+    </head>
+    <style>
+        /* body {
         background: #f7f7f7;
         color: #333;
     } */
-</style>
-<body>
+    </style>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="container">
+                <a href="#" class="brand">Itians</a>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html" class="btn">Login</a></li>
+                </ul>
+            </div>
+        </nav>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-    <div class="container">
-        <a href="#" class="brand">Itians</a>
-        <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="courses.html">Courses</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="login.html" class="btn">Login</a></li>
-        </ul>
-    </div>
-</nav>
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>Upgrade Your Skills with Itians</h1>
+                <p>
+                    Learn programming, networking, cybersecurity, and more from
+                    top instructors.
+                </p>
+                <a href="#" class="btn hero-btn">Browse Courses</a>
+            </div>
+        </section>
 
-<!-- HERO SECTION -->
-<section class="hero">
-    <div class="container hero-content">
-        <h1>Upgrade Your Skills with Itians</h1>
-        <p>Learn programming, networking, cybersecurity, and more from top instructors.</p>
-        <a href="#" class="btn hero-btn">Browse Courses</a>
-    </div>
-</section>
+        <!-- POPULAR COURSES -->
+        <section class="courses-section">
+            <div class="container">
+                <h2 class="section-title">Popular Courses</h2>
+                <div class="courses-grid">
+                    <div class="course-card">
+                        <img src="https://via.placeholder.com/400x250" alt="" />
+                        <div class="course-body">
+                            <h3>Full Stack Web Development</h3>
+                            <p>
+                                Learn HTML, CSS, JavaScript, React, Node.js and
+                                build full projects.
+                            </p>
+                            <a href="#" class="btn">Enroll Now</a>
+                        </div>
+                    </div>
 
-<!-- POPULAR COURSES -->
-<section class="courses-section">
-    <div class="container">
-        <h2 class="section-title">Popular Courses</h2>
-        <div class="courses-grid">
+                    <div class="course-card">
+                        <img src="https://via.placeholder.com/400x250" alt="" />
+                        <div class="course-body">
+                            <h3>Cybersecurity Fundamentals</h3>
+                            <p>
+                                Master penetration testing, Kali Linux, and
+                                ethical hacking.
+                            </p>
+                            <a href="#" class="btn">Enroll Now</a>
+                        </div>
+                    </div>
 
-            <div class="course-card">
-                <img src="https://via.placeholder.com/400x250" alt="">
-                <div class="course-body">
-                    <h3>Full Stack Web Development</h3>
-                    <p>Learn HTML, CSS, JavaScript, React, Node.js and build full projects.</p>
-                    <a href="#" class="btn">Enroll Now</a>
+                    <div class="course-card">
+                        <img src="https://via.placeholder.com/400x250" alt="" />
+                        <div class="course-body">
+                            <h3>Java Spring Boot</h3>
+                            <p>
+                                Build powerful backend APIs using Java Spring
+                                Boot.
+                            </p>
+                            <a href="#" class="btn">Enroll Now</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="course-card">
-                <img src="https://via.placeholder.com/400x250" alt="">
-                <div class="course-body">
-                    <h3>Cybersecurity Fundamentals</h3>
-                    <p>Master penetration testing, Kali Linux, and ethical hacking.</p>
-                    <a href="#" class="btn">Enroll Now</a>
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2026 Itians - All Rights Reserved</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
                 </div>
             </div>
+        </footer>
 
-            <div class="course-card">
-                <img src="https://via.placeholder.com/400x250" alt="">
-                <div class="course-body">
-                    <h3>Java Spring Boot</h3>
-                    <p>Build powerful backend APIs using Java Spring Boot.</p>
-                    <a href="#" class="btn">Enroll Now</a>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-    <div class="container">
-        <p>© 2026 Itians - All Rights Reserved</p>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-        </div>
-    </div>
-</footer>
-</body>
+        <script src="js/main.js"></script>
+    </body>
 </html>
