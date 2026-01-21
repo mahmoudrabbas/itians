@@ -1,111 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
-    <link rel="stylesheet" href="/css/courses.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/courses.css" />
+        <title>Courses - Itians</title>
+        <style></style>
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="brand">Itians</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Courses</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li>
+                        <a href="login.html" id="loginbtn" class="btn">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+            <h1>Explore Our Courses</h1>
+            <p>Learn from industry experts and advance your career</p>
+        </div>
+
+        <!-- MAIN CONTENT -->
         <div class="container">
-            <a href="index.html" class="brand">Itian</a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="courses.html" class="active">Courses</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="#" class="btn">Sign Up</a></li>
-            </ul>
-        </div>
-    </nav>
+            <!-- FILTERS -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Category:</label>
+                    <select id="categoryFilter">
+                        <option value="all">All Categories</option>
+                        <option value="Programming">Programming</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="Data Science">Data Science</option>
+                        <option value="Networking">Networking</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Price:</label>
+                    <select id="priceFilter">
+                        <option value="all">All</option>
+                        <option value="free">Free</option>
+                        <option value="paid">Paid</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Search:</label>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search courses..."
+                    />
+                </div>
+            </div>
 
-    <!-- HERO SECTION -->
-    <section class="about-hero">
-        <div class="container">
-            <h1>Our Courses</h1>
-            <p>Explore our wide range of programming, networking, and cybersecurity courses</p>
-            <a href="#courses-grid" class="hero-btn">View Courses</a>
+            <!-- COURSES GRID -->
+            <div class="courses-grid" id="coursesGrid"></div>
         </div>
-    </section>
 
-    <!-- COURSES CARDS -->
-    <section class="about-cards" id="courses-grid">
-        <div class="container cards-grid">
-            <div class="card">
-                <h3>Java Programming</h3>
-                <p>Learn the fundamentals of Java programming, OOP concepts, and build projects.</p>
-                <ul>
-                    <li>Beginner to Advanced</li>
-                    <li>Hands-on Projects</li>
-                    <li>Certificate of Completion</li>
-                </ul>
-                <a href="#" class="hero-btn">Enroll Now</a>
-            </div>
-            <div class="card">
-                <h3>Web Development</h3>
-                <p>Master HTML, CSS, JavaScript, and frameworks like React to create amazing websites.</p>
-                <ul>
-                    <li>Frontend & Backend</li>
-                    <li>Real Projects</li>
-                    <li>Job Ready Skills</li>
-                </ul>
-                <a href="#" class="hero-btn">Enroll Now</a>
-            </div>
-            <div class="card">
-                <h3>Cybersecurity</h3>
-                <p>Learn ethical hacking, penetration testing, and how to secure applications and networks.</p>
-                <ul>
-                    <li>Ethical Hacking Basics</li>
-                    <li>Penetration Testing Labs</li>
-                    <li>Practical Exercises</li>
-                </ul>
-                <a href="#" class="hero-btn">Enroll Now</a>
-            </div>
-            <div class="card">
-                <h3>Python Programming</h3>
-                <p>Start from scratch and explore Python for automation, data science, and AI.</p>
-                <ul>
-                    <li>Beginner Friendly</li>
-                    <li>Data Science Projects</li>
-                    <li>Automation Scripts</li>
-                </ul>
-                <a href="#" class="hero-btn">Enroll Now</a>
-            </div>
-            <div class="card">
-                <h3>Networking Essentials</h3>
-                <p>Understand networking fundamentals, protocols, and practical network configuration.</p>
-                <ul>
-                    <li>CCNA Preparation</li>
-                    <li>Hands-on Labs</li>
-                    <li>Network Security Tips</li>
-                </ul>
-                <a href="#" class="hero-btn">Enroll Now</a>
-            </div>
-            <div class="card">
-                <h3>Mobile App Development</h3>
-                <p>Build Android apps using Java and explore mobile app design and deployment.</p>
-                <ul>
-                    <li>Java for Android</li>
-                    <li>Real App Projects</li>
-                    <li>Publishing on Play Store</li>
-                </ul>
-                <a href="#" class="hero-btn">Enroll Now</a>
+        <!-- COURSE DETAIL MODAL -->
+        <div id="courseModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-header">
+                    <h2 id="modalTitle"></h2>
+                    <span id="modalCategory" class="course-category"></span>
+                </div>
+                <img id="modalImage" class="course-image" src="" alt="" />
+                <p id="modalInstructor" class="course-instructor"></p>
+                <p id="modalDescription" class="course-description"></p>
+                <div>
+                    <strong>Duration:</strong>
+                    <span id="modalDuration"></span>
+                    <br />
+                    <strong>Price:</strong>
+                    <span id="modalPrice"></span>
+                </div>
+                <h3 style="margin-top: 1.5rem">Course Content</h3>
+                <ul id="modalContent" class="course-content-list"></ul>
+                <button class="btn enroll-btn" onclick="enrollCourse()">
+                    Enroll Now
+                </button>
             </div>
         </div>
-    </section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <p>&copy; 2026 ITIian. All Rights Reserved.</p>
-        <div>
-            <a href="#">Facebook</a>
-            <a href="#">Instagram</a>
-            <a href="#">LinkedIn</a>
-        </div>
-    </footer>
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2026 Itians - All Rights Reserved</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
 
-</body>
+        <script src="js/courses.js"></script>
+    </body>
 </html>

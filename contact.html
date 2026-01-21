@@ -1,62 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact - Itians</title>
-    <link rel="stylesheet" href="/css/contact.css" />
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Contact - Itians</title>
+        <link rel="stylesheet" href="/css/contact.css" />
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="container">
+                <a href="#" class="brand">Itians</a>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html" class="btn">Login</a></li>
+                </ul>
+            </div>
+        </nav>
+        <!-- HERO SECTION -->
+        <section class="hero contact-hero">
+            <div class="container hero-content">
+                <h1>Contact Us</h1>
+                <p>Have questions? We're here to help.</p>
+            </div>
+        </section>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-    <div class="container">
-        <a href="#" class="brand">Itians</a>
-        <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="courses.html">Courses</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="login.html" class="btn">Login</a></li>
-        </ul>
-    </div>
-</nav>
-<!-- HERO SECTION -->
-<section class="hero contact-hero">
-    <div class="container hero-content">
-        <h1>Contact Us</h1>
-        <p>Have questions? We're here to help.</p>
-    </div>
-</section>
+        <!-- CONTACT FORM -->
+        <section class="contact-section">
+            <div class="container contact-form">
+                <form>
+                    <label>Name</label>
+                    <input type="text" class="input" required />
 
-<!-- CONTACT FORM -->
-<section class="contact-section">
-    <div class="container contact-form">
-        <form>
-            <label>Name</label>
-            <input type="text" class="input" required>
+                    <label>Email</label>
+                    <input type="email" class="input" required />
 
-            <label>Email</label>
-            <input type="email" class="input" required>
+                    <label>Message</label>
+                    <textarea
+                        class="input textarea"
+                        rows="6"
+                        required
+                    ></textarea>
 
-            <label>Message</label>
-            <textarea class="input textarea" rows="6" required></textarea>
+                    <button class="btn">Send Message</button>
+                </form>
+            </div>
+        </section>
 
-            <button class="btn">Send Message</button>
-        </form>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-    <div class="container">
-        <p>© 2026 Itians - All Rights Reserved</p>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-        </div>
-    </div>
-</footer>
-
-</body>
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2026 Itians - All Rights Reserved</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+    </body>
 </html>

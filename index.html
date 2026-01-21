@@ -5,24 +5,117 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Itians - E-Learning Platform</title>
         <link rel="stylesheet" href="/css/styles.css" />
+        <style>
+            .courses-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: 2rem;
+                margin: 2rem 0;
+            }
+
+            .course-card {
+                background: white;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                transition:
+                    transform 0.3s,
+                    box-shadow 0.3s;
+                cursor: pointer;
+            }
+
+            .course-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            }
+
+            .course-image {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+            }
+
+            .course-body {
+                padding: 1.5rem;
+            }
+
+            .course-category {
+                display: inline-block;
+                background: #3498db;
+                color: white;
+                padding: 0.3rem 0.8rem;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .course-title {
+                font-size: 1.3rem;
+                margin: 0.5rem 0;
+                color: #2c3e50;
+            }
+
+            .course-instructor {
+                color: #7f8c8d;
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .course-description {
+                color: #555;
+                font-size: 0.9rem;
+                line-height: 1.5;
+                margin: 1rem 0;
+            }
+
+            .course-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid #eee;
+            }
+
+            .course-price {
+                font-size: 1.3rem;
+                font-weight: bold;
+                color: #27ae60;
+            }
+
+            .course-price.free {
+                color: #3498db;
+            }
+
+            .course-duration {
+                color: #7f8c8d;
+                font-size: 0.85rem;
+            }
+
+            .btn.enroll-btn {
+                background: #27ae60;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .btn.enroll-btn:hover {
+                background: #229954;
+            }
+        </style>
     </head>
-    <style>
-        /* body {
-        background: #f7f7f7;
-        color: #333;
-    } */
-    </style>
     <body>
         <!-- NAVBAR -->
         <nav class="navbar">
             <div class="container">
-                <a href="#" class="brand">Itians</a>
+                <a href="index.html" class="brand">Itians</a>
                 <ul class="nav-links">
-                    <li><a href="#">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="courses.html">Courses</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
-                    <li><a href="login.html" class="btn">Login</a></li>
+                    <li>
+                        <a href="login.html" id="loginbtn" class="btn">Login</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -35,7 +128,7 @@
                     Learn programming, networking, cybersecurity, and more from
                     top instructors.
                 </p>
-                <a href="#" class="btn hero-btn">Browse Courses</a>
+                <a href="courses.html" class="btn hero-btn">Browse Courses</a>
             </div>
         </section>
 
@@ -43,42 +136,8 @@
         <section class="courses-section">
             <div class="container">
                 <h2 class="section-title">Popular Courses</h2>
-                <div class="courses-grid">
-                    <div class="course-card">
-                        <img src="https://via.placeholder.com/400x250" alt="" />
-                        <div class="course-body">
-                            <h3>Full Stack Web Development</h3>
-                            <p>
-                                Learn HTML, CSS, JavaScript, React, Node.js and
-                                build full projects.
-                            </p>
-                            <a href="#" class="btn">Enroll Now</a>
-                        </div>
-                    </div>
-
-                    <div class="course-card">
-                        <img src="https://via.placeholder.com/400x250" alt="" />
-                        <div class="course-body">
-                            <h3>Cybersecurity Fundamentals</h3>
-                            <p>
-                                Master penetration testing, Kali Linux, and
-                                ethical hacking.
-                            </p>
-                            <a href="#" class="btn">Enroll Now</a>
-                        </div>
-                    </div>
-
-                    <div class="course-card">
-                        <img src="https://via.placeholder.com/400x250" alt="" />
-                        <div class="course-body">
-                            <h3>Java Spring Boot</h3>
-                            <p>
-                                Build powerful backend APIs using Java Spring
-                                Boot.
-                            </p>
-                            <a href="#" class="btn">Enroll Now</a>
-                        </div>
-                    </div>
+                <div class="courses-grid" id="coursesGrid">
+                    <!-- Courses will be loaded here dynamically -->
                 </div>
             </div>
         </section>
@@ -94,6 +153,224 @@
             </div>
         </footer>
 
-        <script src="js/main.js"></script>
+        <script>
+            const loginBtn = document.getElementById('loginbtn');
+            const navLinks = document.querySelector('.nav-links');
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+
+            // Handle navbar based on login status
+            if (user) {
+                // Hide About and Contact links
+                const aboutLink = navLinks.querySelector(
+                    'a[href="about.html"]'
+                );
+                const contactLink = navLinks.querySelector(
+                    'a[href="contact.html"]'
+                );
+
+                if (aboutLink) aboutLink.parentElement.style.display = 'none';
+                if (contactLink)
+                    contactLink.parentElement.style.display = 'none';
+
+                // Hide login button
+                loginBtn.style.display = 'none';
+
+                // Add Profile link
+                const profileLi = document.createElement('li');
+                profileLi.innerHTML =
+                    '<a href="student/profile.html">Profile</a>';
+                navLinks.appendChild(profileLi);
+
+                // Add Logout button
+                const logoutLi = document.createElement('li');
+                logoutLi.innerHTML =
+                    '<a href="#" class="btn" onclick="logout()">Logout</a>';
+                navLinks.appendChild(logoutLi);
+            } else {
+                loginBtn.textContent = 'Login';
+                loginBtn.href = 'login.html';
+            }
+
+            function logout() {
+                localStorage.removeItem('currentUser');
+                location.href = 'login.html';
+            }
+
+            // Load courses from localStorage
+            function loadCourses() {
+                let courses = JSON.parse(localStorage.getItem('courses')) || [];
+
+                // If no courses in localStorage, initialize with default courses
+                if (courses.length === 0) {
+                    courses = [
+                        {
+                            id: 1,
+                            title: 'Full Stack Web Development',
+                            image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500',
+                            category: 'Programming',
+                            instructor: 'Ahmed Hassan',
+                            description:
+                                'Master HTML, CSS, JavaScript, React, Node.js and MongoDB. Build complete web applications from scratch.',
+                            price: 499,
+                            duration: '12 weeks',
+                            content: [],
+                        },
+                        {
+                            id: 2,
+                            title: 'Cybersecurity Fundamentals',
+                            image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500',
+                            category: 'Cybersecurity',
+                            instructor: 'Sara Mohamed',
+                            description:
+                                'Learn ethical hacking, penetration testing, network security, and how to protect systems from cyber threats.',
+                            price: 599,
+                            duration: '10 weeks',
+                            content: [],
+                        },
+                        {
+                            id: 3,
+                            title: 'Python for Data Science',
+                            image: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500',
+                            category: 'Data Science',
+                            instructor: 'Omar Ali',
+                            description:
+                                'Learn Python programming, data analysis with Pandas, visualization with Matplotlib, and machine learning basics.',
+                            price: 0,
+                            duration: '8 weeks',
+                            content: [],
+                        },
+                        {
+                            id: 4,
+                            title: 'Java Spring Boot',
+                            image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500',
+                            category: 'Programming',
+                            instructor: 'Youssef Ibrahim',
+                            description:
+                                'Build powerful REST APIs with Java Spring Boot. Learn Spring Security, JPA, and microservices architecture.',
+                            price: 549,
+                            duration: '10 weeks',
+                            content: [],
+                        },
+                        {
+                            id: 5,
+                            title: 'CCNA - Networking Essentials',
+                            image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500',
+                            category: 'Networking',
+                            instructor: 'Mahmoud Sayed',
+                            description:
+                                'Prepare for CCNA certification. Learn routing, switching, IP addressing, and network protocols.',
+                            price: 699,
+                            duration: '14 weeks',
+                            content: [],
+                        },
+                        {
+                            id: 6,
+                            title: 'React Native Mobile Development',
+                            image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500',
+                            category: 'Programming',
+                            instructor: 'Nour Ahmed',
+                            description:
+                                'Build cross-platform mobile apps for iOS and Android using React Native and JavaScript.',
+                            price: 0,
+                            duration: '9 weeks',
+                            content: [],
+                        },
+                    ];
+                    localStorage.setItem('courses', JSON.stringify(courses));
+                }
+
+                // Display first 6 courses
+                displayCourses(courses.slice(0, 6));
+            }
+
+            // Display courses
+            function displayCourses(courses) {
+                const grid = document.getElementById('coursesGrid');
+                grid.innerHTML = '';
+
+                courses.forEach((course) => {
+                    const card = document.createElement('div');
+                    card.className = 'course-card';
+                    card.onclick = () => handleCourseClick(course.id);
+
+                    const priceHTML =
+                        course.price === 0
+                            ? '<span class="course-price free">Free</span>'
+                            : `<span class="course-price">$${course.price}</span>`;
+
+                    card.innerHTML = `
+                        <img src="${course.image}" alt="${course.title}" class="course-image">
+                        <div class="course-body">
+                            <span class="course-category">${course.category}</span>
+                            <h3 class="course-title">${course.title}</h3>
+                            <p class="course-instructor">By ${course.instructor}</p>
+                            <p class="course-description">${course.description.substring(0, 100)}...</p>
+                            <div class="course-footer">
+                                ${priceHTML}
+                                <span class="course-duration">${course.duration}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    grid.appendChild(card);
+                });
+            }
+
+            // Handle course click
+            function handleCourseClick(courseId) {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+
+                if (!user) {
+                    // Not logged in - redirect to signup
+                    // alert('Please sign up or login to enroll in courses');
+                    location.href = 'signup.html';
+                    return;
+                }
+
+                // User is logged in - check if already enrolled
+                if (user.courses.includes(courseId)) {
+                    // Already enrolled - go to course content
+                    location.href = `/course/course-content.html?id=${courseId}`;
+                    return;
+                }
+
+                // Not enrolled yet - go to payment page
+                const courses = JSON.parse(localStorage.getItem('courses'));
+                const course = courses.find((c) => c.id === courseId);
+
+                if (course.price === 0) {
+                    // Free course - enroll directly
+                    enrollInCourse(courseId);
+                } else {
+                    // Paid course - go to payment
+                    location.href = `payment.html?id=${courseId}`;
+                }
+            }
+
+            // Enroll in free course
+            function enrollInCourse(courseId) {
+                const user = JSON.parse(localStorage.getItem('currentUser'));
+                const courses = JSON.parse(localStorage.getItem('courses'));
+                const course = courses.find((c) => c.id === courseId);
+
+                // Add course to user
+                user.courses.push(courseId);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+
+                // Update user in users array
+                let users = JSON.parse(localStorage.getItem('users'));
+                const userIndex = users.findIndex((u) => u.id === user.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = user;
+                    localStorage.setItem('users', JSON.stringify(users));
+                }
+
+                alert(`Successfully enrolled in ${course.title}!`);
+                location.href = `/course/course-content.html?id=${courseId}`;
+            }
+
+            // Load courses on page load
+            loadCourses();
+        </script>
     </body>
 </html>

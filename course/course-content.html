@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/css/course-content.css" />
+        <link rel="stylesheet" href="/css/styles.css" />
+        <title>Course Content - Itians</title>
+        <style></style>
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="container">
+                <a href="../index.html" class="brand">Itians</a>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../courses.html">Courses</a></li>
+                    <li><a href="../student/profile.html">Profile</a></li>
+                    <li>
+                        <a href="#" class="btn" onclick="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- COURSE HEADER -->
+        <div class="course-header">
+            <div class="container">
+                <h1 id="courseTitle">Loading...</h1>
+                <div class="course-meta">
+                    <span>
+                        📚
+                        <span id="courseCategory"></span>
+                    </span>
+                    <span>
+                        👨‍🏫
+                        <span id="courseInstructor"></span>
+                    </span>
+                    <span>
+                        ⏱️
+                        <span id="courseDuration"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROGRESS SECTION -->
+        <div class="container">
+            <div class="progress-section">
+                <h3>Your Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="container">
+            <div class="course-container">
+                <!-- SIDEBAR -->
+                <div class="course-sidebar">
+                    <div class="sidebar-header">
+                        <h3>Course Content</h3>
+                    </div>
+                    <ul class="content-list" id="contentList">
+                        <!-- Content items will be loaded here -->
+                    </ul>
+                </div>
+
+                <!-- MAIN AREA -->
+                <div class="course-main" id="mainContent">
+                    <div class="empty-state">
+                        <h2>Welcome to the Course!</h2>
+                        <p>
+                            Select a lesson from the sidebar to start learning.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container">
+                <p>© 2026 Itians - All Rights Reserved</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            // Get course ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseId = parseInt(urlParams.get('id'));
+
+            // Check if user is logged in
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                alert('Please login first!');
+                window.location.href = 'login.html';
+            }
+
+            // Check if user is enrolled in this course
+            if (!currentUser.courses.includes(courseId)) {
+                alert('You are not enrolled in this course!');
+                window.location.href = 'courses.html';
+            }
+
+            // Get course data
+            const courses = JSON.parse(localStorage.getItem('courses'));
+            const course = courses.find((c) => c.id === courseId);
+
+            if (!course) {
+                alert('Course not found!');
+                window.location.href = 'courses.html';
+            }
+
+            // Track current content index
+            let currentContentIndex = 0;
+
+            // Initialize user progress
+            let userProgress = JSON.parse(
+                localStorage.getItem(`progress_${currentUser.id}_${courseId}`)
+            ) || {
+                completedItems: [],
+                lastAccessed: null,
+            };
+
+            // Display course information
+            function displayCourseInfo() {
+                document.getElementById('courseTitle').textContent =
+                    course.title;
+                document.getElementById('courseCategory').textContent =
+                    course.category;
+                document.getElementById('courseInstructor').textContent =
+                    course.instructor;
+                document.getElementById('courseDuration').textContent =
+                    course.duration;
+            }
+
+            // Display content list
+            function displayContentList() {
+                const contentList = document.getElementById('contentList');
+                contentList.innerHTML = '';
+
+                course.content.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'content-item';
+                    if (index === currentContentIndex) {
+                        li.classList.add('active');
+                    }
+
+                    const isCompleted =
+                        userProgress.completedItems.includes(index);
+                    const typeClass =
+                        item.type === 'video' ? 'video-type' : 'pdf-type';
+
+                    li.innerHTML = `
+                    <div class="content-item-title">
+                        <span class="content-number">${index + 1}</span>
+                        <div>
+                            <div>${item.title}</div>
+                            <span class="content-type ${typeClass}">${item.type}</span>
+                        </div>
+                    </div>
+                    ${isCompleted ? '<span class="completion-badge">✓ Completed</span>' : ''}
+                `;
+
+                    li.onclick = () => loadContent(index);
+                    contentList.appendChild(li);
+                });
+
+                updateProgress();
+            }
+
+            // Load content
+            function loadContent(index) {
+                currentContentIndex = index;
+                const item = course.content[index];
+
+                const mainContent = document.getElementById('mainContent');
+
+                if (item.type === 'video') {
+                    mainContent.innerHTML = `
+                    <div class="video-container">
+                        <iframe 
+                            src="${item.link}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="content-details">
+                        <h2 class="content-title">${item.title}</h2>
+                        <p class="content-description">
+                            Watch this video to learn about ${item.title.toLowerCase()}. 
+                            Make sure to take notes and practice the concepts covered.
+                        </p>
+                    </div>
+                    <div class="content-navigation">
+                        <button class="nav-btn" onclick="previousContent()" ${index === 0 ? 'disabled' : ''}>
+                            ← Previous
+                        </button>
+                        <button class="nav-btn" onclick="markAsCompleted()">
+                            ${userProgress.completedItems.includes(index) ? '✓ Completed' : 'Mark as Complete'}
+                        </button>
+                        <button class="nav-btn" onclick="nextContent()" ${index === course.content.length - 1 ? 'disabled' : ''}>
+                            Next →
+                        </button>
+                    </div>
+                `;
+                } else if (item.type === 'pdf') {
+                    mainContent.innerHTML = `
+                    <div class="content-details" style="padding: 3rem 2rem; text-align: center;">
+                        <h2 class="content-title">${item.title}</h2>
+                        <p class="content-description">
+                            This is a PDF resource. Download or view the material to continue learning.
+                        </p>
+                        <a href="${item.link}" class="btn" style="display: inline-block; margin: 2rem 0;" target="_blank">
+                            📄 View PDF
+                        </a>
+                    </div>
+                    <div class="content-navigation">
+                        <button class="nav-btn" onclick="previousContent()" ${index === 0 ? 'disabled' : ''}>
+                            ← Previous
+                        </button>
+                        <button class="nav-btn" onclick="markAsCompleted()">
+                            ${userProgress.completedItems.includes(index) ? '✓ Completed' : 'Mark as Complete'}
+                        </button>
+                        <button class="nav-btn" onclick="nextContent()" ${index === course.content.length - 1 ? 'disabled' : ''}>
+                            Next →
+                        </button>
+                    </div>
+                `;
+                }
+
+                // Update last accessed
+                userProgress.lastAccessed = index;
+                saveProgress();
+
+                displayContentList();
+                window.scrollTo(0, 0);
+            }
+
+            // Mark content as completed
+            function markAsCompleted() {
+                if (
+                    !userProgress.completedItems.includes(currentContentIndex)
+                ) {
+                    userProgress.completedItems.push(currentContentIndex);
+                    saveProgress();
+                    loadContent(currentContentIndex);
+                }
+            }
+
+            // Navigation functions
+            function previousContent() {
+                if (currentContentIndex > 0) {
+                    loadContent(currentContentIndex - 1);
+                }
+            }
+
+            function nextContent() {
+                if (currentContentIndex < course.content.length - 1) {
+                    loadContent(currentContentIndex + 1);
+                }
+            }
+
+            // Update progress bar
+            function updateProgress() {
+                const total = course.content.length;
+                const completed = userProgress.completedItems.length;
+                const percentage =
+                    total > 0 ? Math.round((completed / total) * 100) : 0;
+
+                const progressFill = document.getElementById('progressFill');
+                progressFill.style.width = percentage + '%';
+                progressFill.textContent = percentage + '%';
+            }
+
+            // Save progress to localStorage
+            function saveProgress() {
+                localStorage.setItem(
+                    `progress_${currentUser.id}_${courseId}`,
+                    JSON.stringify(userProgress)
+                );
+            }
+
+            // Logout function
+            function logout() {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            }
+
+            // Initialize page
+            displayCourseInfo();
+            displayContentList();
+
+            // Load last accessed content or first content
+            if (userProgress.lastAccessed !== null) {
+                loadContent(userProgress.lastAccessed);
+            } else if (course.content.length > 0) {
+                loadContent(0);
+            }
+        </script>
+    </body>
+</html>
