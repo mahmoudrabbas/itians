@@ -197,94 +197,97 @@
             }
 
             // Load courses from localStorage
-            function loadCourses() {
-                let courses = JSON.parse(localStorage.getItem('courses')) || [];
+            // function loadCourses() {
+            //     let courses = JSON.parse(localStorage.getItem('courses')) || [];
 
-                // If no courses in localStorage, initialize with default courses
-                if (courses.length === 0) {
-                    courses = [
-                        {
-                            id: 1,
-                            title: 'Full Stack Web Development',
-                            image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500',
-                            category: 'Programming',
-                            instructor: 'Ahmed Hassan',
-                            description:
-                                'Master HTML, CSS, JavaScript, React, Node.js and MongoDB. Build complete web applications from scratch.',
-                            price: 499,
-                            duration: '12 weeks',
-                            content: [],
-                        },
-                        {
-                            id: 2,
-                            title: 'Cybersecurity Fundamentals',
-                            image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500',
-                            category: 'Cybersecurity',
-                            instructor: 'Sara Mohamed',
-                            description:
-                                'Learn ethical hacking, penetration testing, network security, and how to protect systems from cyber threats.',
-                            price: 599,
-                            duration: '10 weeks',
-                            content: [],
-                        },
-                        {
-                            id: 3,
-                            title: 'Python for Data Science',
-                            image: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500',
-                            category: 'Data Science',
-                            instructor: 'Omar Ali',
-                            description:
-                                'Learn Python programming, data analysis with Pandas, visualization with Matplotlib, and machine learning basics.',
-                            price: 0,
-                            duration: '8 weeks',
-                            content: [],
-                        },
-                        {
-                            id: 4,
-                            title: 'Java Spring Boot',
-                            image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500',
-                            category: 'Programming',
-                            instructor: 'Youssef Ibrahim',
-                            description:
-                                'Build powerful REST APIs with Java Spring Boot. Learn Spring Security, JPA, and microservices architecture.',
-                            price: 549,
-                            duration: '10 weeks',
-                            content: [],
-                        },
-                        {
-                            id: 5,
-                            title: 'CCNA - Networking Essentials',
-                            image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500',
-                            category: 'Networking',
-                            instructor: 'Mahmoud Sayed',
-                            description:
-                                'Prepare for CCNA certification. Learn routing, switching, IP addressing, and network protocols.',
-                            price: 699,
-                            duration: '14 weeks',
-                            content: [],
-                        },
-                        {
-                            id: 6,
-                            title: 'React Native Mobile Development',
-                            image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500',
-                            category: 'Programming',
-                            instructor: 'Nour Ahmed',
-                            description:
-                                'Build cross-platform mobile apps for iOS and Android using React Native and JavaScript.',
-                            price: 0,
-                            duration: '9 weeks',
-                            content: [],
-                        },
-                    ];
-                    localStorage.setItem('courses', JSON.stringify(courses));
-                }
+            //     // If no courses in localStorage, initialize with default courses
+            //     if (courses.length === 0) {
+            //         courses = [
+            //             {
+            //                 id: 1,
+            //                 title: 'Full Stack Web Development',
+            //                 image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500',
+            //                 category: 'Programming',
+            //                 instructor: 'Ahmed Hassan',
+            //                 description:
+            //                     'Master HTML, CSS, JavaScript, React, Node.js and MongoDB. Build complete web applications from scratch.',
+            //                 price: 499,
+            //                 duration: '12 weeks',
+            //                 content: [],
+            //             },
+            //             {
+            //                 id: 2,
+            //                 title: 'Cybersecurity Fundamentals',
+            //                 image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500',
+            //                 category: 'Cybersecurity',
+            //                 instructor: 'Sara Mohamed',
+            //                 description:
+            //                     'Learn ethical hacking, penetration testing, network security, and how to protect systems from cyber threats.',
+            //                 price: 599,
+            //                 duration: '10 weeks',
+            //                 content: [],
+            //             },
+            //             {
+            //                 id: 3,
+            //                 title: 'Python for Data Science',
+            //                 image: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500',
+            //                 category: 'Data Science',
+            //                 instructor: 'Omar Ali',
+            //                 description:
+            //                     'Learn Python programming, data analysis with Pandas, visualization with Matplotlib, and machine learning basics.',
+            //                 price: 0,
+            //                 duration: '8 weeks',
+            //                 content: [],
+            //             },
+            //             {
+            //                 id: 4,
+            //                 title: 'Java Spring Boot',
+            //                 image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=500',
+            //                 category: 'Programming',
+            //                 instructor: 'Youssef Ibrahim',
+            //                 description:
+            //                     'Build powerful REST APIs with Java Spring Boot. Learn Spring Security, JPA, and microservices architecture.',
+            //                 price: 549,
+            //                 duration: '10 weeks',
+            //                 content: [],
+            //             },
+            //             {
+            //                 id: 5,
+            //                 title: 'CCNA - Networking Essentials',
+            //                 image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500',
+            //                 category: 'Networking',
+            //                 instructor: 'Mahmoud Sayed',
+            //                 description:
+            //                     'Prepare for CCNA certification. Learn routing, switching, IP addressing, and network protocols.',
+            //                 price: 699,
+            //                 duration: '14 weeks',
+            //                 content: [],
+            //             },
+            //             {
+            //                 id: 6,
+            //                 title: 'React Native Mobile Development',
+            //                 image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500',
+            //                 category: 'Programming',
+            //                 instructor: 'Nour Ahmed',
+            //                 description:
+            //                     'Build cross-platform mobile apps for iOS and Android using React Native and JavaScript.',
+            //                 price: 0,
+            //                 duration: '9 weeks',
+            //                 content: [],
+            //             },
+            //         ];
+            //         localStorage.setItem('courses', JSON.stringify(courses));
+            //     }
 
-                // Display first 6 courses
-                displayCourses(courses.slice(0, 6));
-            }
+            //     // Display first 6 courses
+            //     displayCourses(courses.slice(0, 6));
+            // }
 
             // Display courses
+
             function displayCourses(courses) {
+                console.log(courses);
+
                 const grid = document.getElementById('coursesGrid');
                 grid.innerHTML = '';
 
@@ -315,6 +318,8 @@
                     grid.appendChild(card);
                 });
             }
+
+            displayCourses(JSON.parse(localStorage.getItem('courses')));
 
             // Handle course click
             function handleCourseClick(courseId) {
@@ -370,7 +375,7 @@
             }
 
             // Load courses on page load
-            loadCourses();
+            // loadCourses();
         </script>
     </body>
 </html>

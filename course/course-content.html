@@ -95,27 +95,30 @@
             // Get course ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             const courseId = parseInt(urlParams.get('id'));
+            console.log(courseId);
 
             // Check if user is logged in
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (!currentUser) {
                 // alert('Please login first!');
-                window.location.href = 'login.html';
+                window.location.href = '../login.html';
             }
 
-            // Check if user is enrolled in this course
+            // check if user is enrolled in this course
             if (!currentUser.courses.includes(courseId)) {
-                // alert('You are not enrolled in this course!');
-                window.location.href = 'courses.html';
+                alert('You are not enrolled in this course!');
+                window.location.href = '../courses.html';
             }
 
             // Get course data
             const courses = JSON.parse(localStorage.getItem('courses'));
+
             const course = courses.find((c) => c.id === courseId);
+            console.log(course);
 
             if (!course) {
                 alert('Course not found!');
-                window.location.href = 'courses.html';
+                window.location.href = '../courses.html';
             }
 
             // Track current content index
@@ -143,15 +146,22 @@
 
             // Display content list
             function displayContentList() {
+                console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDdde');
+
                 const contentList = document.getElementById('contentList');
                 contentList.innerHTML = '';
+                console.log('qqq');
+                console.log(course);
 
                 course.content.forEach((item, index) => {
+                    console.log('ssssssssssssssssssssssssw');
+
                     const li = document.createElement('li');
                     li.className = 'content-item';
                     if (index === currentContentIndex) {
                         li.classList.add('active');
                     }
+                    console.log('EEEEEEEEEEw');
 
                     const isCompleted =
                         userProgress.completedItems.includes(index);
@@ -168,9 +178,13 @@
                     </div>
                     ${isCompleted ? '<span class="completion-badge">✓ Completed</span>' : ''}
                 `;
+                    console.log('ddw');
 
                     li.onclick = () => loadContent(index);
+                    console.log('dd');
+
                     contentList.appendChild(li);
+                    console.log(contentList);
                 });
 
                 updateProgress();
@@ -178,6 +192,8 @@
 
             // Load content
             function loadContent(index) {
+                console.log('dds');
+
                 currentContentIndex = index;
                 const item = course.content[index];
 

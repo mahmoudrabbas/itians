@@ -11,7 +11,7 @@
         <!-- NAVBAR -->
         <nav class="navbar">
             <div class="container">
-                <a href="index.html" class="brand">Itians</a>
+                <a href="../index.html" class="brand">Itians</a>
                 <ul class="nav-links">
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../courses.html">Courses</a></li>
@@ -167,14 +167,18 @@
 
                 if (user.courses.length === 0) {
                     container.innerHTML =
-                        '<div class="no-courses">You haven\'t enrolled in any courses yet. <a href="courses.html">Browse Courses</a></div>';
+                        '<div class="no-courses">You haven\'t enrolled in any courses yet. <a href="../courses.html">Browse Courses</a></div>';
                     return;
                 }
 
                 container.innerHTML = '';
 
                 user.courses.forEach((courseId) => {
+                    // console.log('course id:', courseId);
                     const course = courses.find((c) => c.id === courseId);
+
+                    // console.log(course);
+
                     if (course) {
                         const courseDiv = document.createElement('div');
                         courseDiv.className = 'enrolled-course';
@@ -193,6 +197,8 @@
 
             // Go to course
             function goToCourse(courseId) {
+                console.log('go to course func');
+
                 window.location.href = `/course/course-content.html?id=${courseId}`;
             }
 
