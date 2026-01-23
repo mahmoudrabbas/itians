@@ -409,3 +409,14 @@ function logout() {
 
 // Display all courses on page load
 displayCourses(allCourses);
+function displayCategory(){
+   let content= document.getElementById("categoryFilter")
+   let cat=JSON.parse(localStorage.getItem("categories"))
+
+   let val=""
+   cat.forEach((ele)=>{
+val+=`<option>${ele}</option>`
+   })
+   content.innerHTML=val
+}
+displayCategory()

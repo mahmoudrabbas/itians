@@ -1,617 +1,422 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>E-Learning Admin — Final (Email validation)</title>
-  <style>
-    :root{
-      --bg:#071024; --card:#0b1220; --muted:#98a0b3; --accent:#4f46e5; --danger:#ef4444;
-      --radius:12px; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color-scheme: dark;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:linear-gradient(180deg,#071024 0%, #07132a 100%);color:#e6eef8;padding:20px}
-    .app{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
-    header{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-    header h1{font-size:18px;margin:0}
-    header .meta{color:var(--muted);font-size:13px}
-    .sidebar{background:var(--card);padding:16px;border-radius:14px;min-height:560px}
-    .nav{display:flex;flex-direction:column;gap:8px}
-    .nav button{background:transparent;border:0;color:var(--muted);text-align:left;padding:10px;border-radius:8px;cursor:pointer}
-    .nav button.active{background:linear-gradient(90deg,var(--accent)22%,transparent);color:#fff}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:14px}
-    .btn{background:var(--accent);border:0;color:white;padding:8px 12px;border-radius:8px;cursor:pointer}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
-    .btn.danger{background:var(--danger)}
-    .btn.small{padding:6px 8px;font-size:13px}
-    table{width:100%;border-collapse:collapse}
-    table thead th{font-size:13px;text-align:left;padding:10px;color:var(--muted)}
-    table tbody td{padding:10px;border-top:1px dashed rgba(255,255,255,0.03);font-size:14px}
-    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
-    input[type=text],input[type=number],textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
-    textarea{min-height:80px}
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .kpi{display:flex;gap:10px;align-items:center}
-    .kpi .value{font-size:20px;font-weight:700}
-    .small{font-size:13px;color:var(--muted)}
-    .modal-backdrop{position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.6),rgba(0,0,0,0.6));display:none;align-items:center;justify-content:center;padding:20px}
-    .modal{width:900px;max-width:100%;background:var(--card);padding:18px;border-radius:12px}
-    .modal h3{margin:0 0 10px}
-    .muted{color:var(--muted)}
-    .flex{display:flex;gap:10px;align-items:center}
-    .spacer{flex:1}
-    .tag{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:13px}
-    footer{grid-column:1/-1;margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
-    @media (max-width:900px){.app{grid-template-columns:1fr}.sidebar{order:2}.card{margin-top:8px}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Itians</title>
+<style>
+    /* ---------- RESET & BASE ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+    body { display: flex; height: 100vh; background: #f5f6fa; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; }
+
+    /* ---------- SIDEBAR ---------- */
+    .sidebar { width: 250px; background: #2f3640; color: #f5f6fa; display: flex; flex-direction: column; }
+    .sidebar h2 { text-align: center; padding: 1.5rem 0; background: #353b48; font-size: 1.5rem; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar ul li { padding: 1rem 1.5rem; transition: 0.2s; }
+    .sidebar ul li:hover { background: #40739e; }
+    .sidebar ul li.active { background: #40739e; }
+    .sidebar ul li button { all: unset; width: 100%; display: block; }
+
+    /* ---------- MAIN ---------- */
+    .main { flex: 1; padding: 1rem 2rem; overflow-y: auto; }
+
+    /* ---------- TABLE ---------- */
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #dcdde1; padding: 0.75rem; text-align: left; }
+    th { background: #40739e; color: white; }
+    td button { padding: 0.3rem 0.6rem; margin-right: 0.3rem; border: none; border-radius: 5px; }
+    .edit-btn { background: #fbc531; color: #2f3640; }
+    .delete-btn { background: #e84118; color: white; }
+    .approve-btn { background: #27ae60; color: white; }
+    .reject-btn { background: #e84118; color: white; }
+
+    /* ---------- MODALS ---------- */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 10; }
+    .modal-content { background: #f5f6fa; padding: 1.5rem; width: 500px; border-radius: 10px; position: relative; max-height: 90%; overflow-y: auto; }
+    .modal-content h3 { margin-bottom: 1rem; }
+    .modal-content input, .modal-content select, .modal-content textarea { width: 100%; padding: 0.5rem; margin-bottom: 0.8rem; border: 1px solid #ccc; border-radius: 5px; }
+    .modal-content button { padding: 0.5rem 1rem; border: none; border-radius: 5px; background: #40739e; color: white; }
+    .close { position: absolute; top: 0.5rem; right: 1rem; font-size: 1.5rem; cursor: pointer; }
+
+    /* ---------- STATS ---------- */
+    .stat-cards { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+    .stat-card { flex: 1; background: #40739e; color: white; padding: 1rem; border-radius: 10px; min-width: 150px; text-align: center; }
+</style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <div>
-        <h1>E-Learning Admin (LocalStorage)</h1>
-        <div class="meta">Single-file demo · All data stored in browser localStorage · English UI</div>
-      </div>
-      <div class="flex">
-        <button class="btn" id="seedBtn">Seed demo data</button>
-        <button class="btn ghost" id="exportBtn">Export JSON</button>
-        <button class="btn ghost" id="importBtn">Import JSON</button>
-        <button class="btn danger" id="resetBtn">Reset All</button>
-      </div>
-    </header>
 
-    <aside class="sidebar card">
-      <div class="nav" role="navigation">
-        <button data-view="dashboard" class="active">Dashboard</button>
-        <button data-view="courses">Courses</button>
-        <button data-view="categories">Categories</button>
-        <button data-view="registrations">Registrations</button>
-        <button data-view="students">Students & Progress</button>
-      </div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul>
+        <li class="active"><button onclick="showSection('dashboard')">Dashboard</button></li>
+        <li><button onclick="showSection('courses')">Courses</button></li>
+        <li><button onclick="showSection('categories')">Categories</button></li>
+        <li><button onclick="showSection('students')">Students</button></li>
+   <li><button onclick="logout()">Logout</button></li>    
+    </ul>
+</div>
 
-      <div class="section-title">Quick info</div>
-      <div style="margin-top:8px;display:flex;flex-direction:column;gap:8px">
-        <div class="kpi card" style="padding:10px;align-items:center">
-          <div>
-            <div class="value" id="k-courses">0</div>
-            <div class="small muted">Courses</div>
-          </div>
-          <div style="width:10px"></div>
-          <div>
-            <div class="value" id="k-categories">0</div>
-            <div class="small muted">Categories</div>
-          </div>
+<!-- MAIN -->
+<div class="main">
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="section">
+        <h2>Dashboard</h2>
+        <div class="stat-cards">
+            <div class="stat-card" id="totalCourses">Courses: 0</div>
+            <div class="stat-card" id="totalCategories">Categories: 0</div>
+            <div class="stat-card" id="totalStudents">Students: 0</div>
+            <div class="stat-card" id="pendingEnrollmentsCard">Pending: 0</div>
         </div>
-        <div class="kpi card" style="padding:10px;align-items:center">
-          <div>
-            <div class="value" id="k-students">0</div>
-            <div class="small muted">Students</div>
-          </div>
-          <div style="width:10px"></div>
-          <div>
-            <div class="value" id="k-pending">0</div>
-            <div class="small muted">Pending regs</div>
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    <main id="main" class="card">
-      <div id="view-root"></div>
-    </main>
-
-    <div class="modal-backdrop" id="modalBackdrop">
-      <div class="modal" role="dialog" aria-modal="true">
-        <div id="modalContent"></div>
-        <div style="margin-top:12px;display:flex;justify-content:flex-end;gap:8px">
-          <button class="btn ghost" id="modalClose">Close</button>
-        </div>
-      </div>
     </div>
 
-    <footer>Built for demo & teaching — everything fully client-side. Export/import to move data between browsers.</footer>
-  </div>
+    <!-- COURSES -->
+    <div id="courses" class="section" style="display:none;">
+        <h2>Courses <button onclick="openCourseModal()">Add Course</button></h2>
+        <table id="coursesTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Instructor</th>
+                    <th>Price</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
-  <script>
-    /* ========================
-       Utilities & persistence (first)
-       ======================== */
-    const LS_KEYS = {CATS:'elearn_categories', COURSES:'elearn_courses', STUDENTS:'elearn_students', REGS:'elearn_registrations'};
+    <!-- CATEGORIES -->
+    <div id="categories" class="section" style="display:none;">
+        <h2>Categories <button onclick="openCategoryModal()">Add Category</button></h2>
+        <table id="categoriesTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
-    function load(key){ try{ return JSON.parse(localStorage.getItem(key)) || []; }catch(e){ return []; } }
-    function save(key,val){ localStorage.setItem(key, JSON.stringify(val)); }
-    function uid(prefix='id'){ return prefix+'_'+Math.random().toString(36).slice(2,9); }
-    function now(){ return new Date().toISOString(); }
-    function q(sel,root=document){ return root.querySelector(sel); }
-    function qa(sel,root=document){ return Array.from(root.querySelectorAll(sel)); }
-    function escapeHTML(s=''){ return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
-    function formatDate(iso){ try{ return new Date(iso).toLocaleString(); }catch(e){ return iso; } }
+    <!-- STUDENTS -->
+    <div id="students" class="section" style="display:none;">
+        <h2>Students & Pending Enrollments</h2>
+        <table id="studentsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Courses</th>
+                    <th>Pending Enrollments</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
-    // UI helpers (must be defined early)
-    function showModal(html){
-      const mb = q('#modalBackdrop'), content = q('#modalContent');
-      if(!mb || !content) return;
-      content.innerHTML = html;
-      mb.style.display = 'flex';
-      const first = content.querySelector('input,select,textarea,button');
-      if(first) first.focus();
+</div>
+
+<!-- COURSE MODAL -->
+<div class="modal" id="courseModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeCourseModal()">&times;</span>
+        <h3>Add / Edit Course</h3>
+        <input type="hidden" id="courseId">
+        <input type="text" id="courseTitle" placeholder="Title">
+        <input type="text" id="courseCategory" placeholder="Category">
+        <input type="text" id="courseInstructor" placeholder="Instructor">
+        <input type="number" id="coursePrice" placeholder="Price">
+        <input type="text" id="courseDuration" placeholder="Duration">
+        <textarea id="courseDescription" placeholder="Description"></textarea>
+        <input type="text" id="courseImage" placeholder="Image URL">
+        <button onclick="saveCourse()">Save</button>
+    </div>
+</div>
+
+<!-- CATEGORY MODAL -->
+<div class="modal" id="categoryModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeCategoryModal()">&times;</span>
+        <h3>Add / Edit Category</h3>
+        <input type="hidden" id="categoryId">
+        <input type="text" id="categoryName" placeholder="Category Name">
+        <button onclick="saveCategory()">Save</button>
+    </div>
+</div>
+
+<script>
+/* ---------- INITIAL DATA ---------- */
+let courses = JSON.parse(localStorage.getItem('courses')) || [];
+let categories = JSON.parse(localStorage.getItem('categories')) || [];
+let users = JSON.parse(localStorage.getItem('users')) || [];
+let pendingEnrollments = JSON.parse(localStorage.getItem('pendingEnrollments')) || [];
+
+/* ---------- SECTION SWITCHING ---------- */
+function showSection(section) {
+    document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+    document.getElementById(section).style.display = 'block';
+    document.querySelectorAll('.sidebar ul li').forEach(li => li.classList.remove('active'));
+    event.target.parentElement.classList.add('active');
+    updateStats();
+    renderTables();
+}
+
+/* ---------- STATS ---------- */
+function updateStats() {
+    document.getElementById('totalCourses').textContent = `Courses: ${courses.length}`;
+    document.getElementById('totalCategories').textContent = `Categories: ${categories.length}`;
+    document.getElementById('totalStudents').textContent = `Students: ${users.filter(u=>u.role==='student').length}`;
+    document.getElementById('pendingEnrollmentsCard').textContent = `Pending: ${pendingEnrollments.length}`;
+}
+
+/* ---------- COURSES TABLE ---------- */
+function renderCourses() {
+    const tbody = document.querySelector('#coursesTable tbody');
+    tbody.innerHTML = '';
+    courses=JSON.parse(localStorage.getItem("courses"))
+    courses.forEach(c=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${c.id}</td>
+            <td>${c.title}</td>
+            <td>${c.category}</td>
+            <td>${c.instructor}</td>
+            <td>${c.price}</td>
+            <td>${c.duration}</td>
+            <td>
+                <button class="edit-btn" onclick="editCourse(${c.id})">Edit</button>
+                <button class="delete-btn" onclick="deleteCourse(${c.id})">Delete</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+/* ---------- CATEGORIES TABLE ---------- */
+function renderCategories() {
+    const tbody = document.querySelector('#categoriesTable tbody');
+    tbody.innerHTML = '';
+    categories=JSON.parse(localStorage.getItem("categories"))
+    console.log(categories)
+    categories.forEach((cat, i)=>{
+        var tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${cat}</td>
+            <td>
+                <button class="edit-btn" onclick="editCategory(${i})">Edit</button>
+                <button class="delete-btn" onclick="deleteCategory(${i})">Delete</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+        //console.log(categories)
+
+      });
+}
+function editCategory(index){
+    let categories = JSON.parse(localStorage.getItem('categories')) || [];
+
+    // تحقق اذا العنصر موجود
+    if(index < 0 || index >= categories.length || !categories[index]){
+        alert('This category does not exist!');
+        return; // الخروج من الدالة
     }
-    function closeModal(){ const mb = q('#modalBackdrop'), content = q('#modalContent'); if(!mb||!content) return; mb.style.display='none'; content.innerHTML=''; }
-    function showToast(msg, ms=1600){ const el=document.createElement('div'); el.textContent=msg; el.style.position='fixed'; el.style.right='18px'; el.style.bottom='18px'; el.style.padding='10px 14px'; el.style.background='rgba(0,0,0,0.6)'; el.style.border='1px solid rgba(255,255,255,0.04)'; el.style.borderRadius='8px'; el.style.zIndex=9999; document.body.appendChild(el); setTimeout(()=>el.style.opacity='0.2', ms-200); setTimeout(()=>el.remove(), ms); }
 
-    // models
-    function getCategories(){ return load(LS_KEYS.CATS); }
-    function setCategories(arr){ save(LS_KEYS.CATS, arr); }
-    function getCourses(){ return load(LS_KEYS.COURSES); }
-    function setCourses(arr){ save(LS_KEYS.COURSES, arr); }
-    function getStudents(){ return load(LS_KEYS.STUDENTS); }
-    function setStudents(arr){ save(LS_KEYS.STUDENTS, arr); }
-    function getRegistrations(){ return load(LS_KEYS.REGS); }
-    function setRegistrations(arr){ save(LS_KEYS.REGS, arr); }
+    // لو موجود، فتح المودال مع تعبئة البيانات
+    document.getElementById('categoryId').value = index; // حفظ index للتعديل
+    document.getElementById('categoryName').value = categories[index];
+    document.getElementById('categoryModal').style.display = 'flex';
+    renderCategories();
+    updateStats();
+}
+ function deleteCategory(index){
+    let categories = JSON.parse(localStorage.getItem('categories')) || [];
+    if(!categories[index]) return; // تأكد ان العنصر موجود
+    if(confirm('Are you sure you want to delete this category?')){
+      //  categories.splice(index, 1); // حذف العنصر
+        categories=categories.filter((ele,ind)=>ind!=index)
+        localStorage.setItem('categories', JSON.stringify(categories));
+        renderCategories();
+        updateStats();
+    }
+}
+/* ---------- EDIT CATEGORY ---------- */
 
-    /* ========================
-       Seed / Export / Import / Reset
-       ======================== */
-    function seedDemo(){
-      if(getCategories().length || getCourses().length || getStudents().length || getRegistrations().length){
-        if(!confirm('There is existing data. Overwrite with demo data?')) return;
-      }
-      const cats = [
-        {id:uid('cat'),name:'Web Development',slug:'web-development',createdAt:now()},
-        {id:uid('cat'),name:'Data Science',slug:'data-science',createdAt:now()},
-        {id:uid('cat'),name:'Design',slug:'design',createdAt:now()}
-      ];
-      const courses = [
-        {id:uid('c'),title:'Modern JavaScript from Zero',categoryId:cats[0].id,description:'A practical ES6+ course.',durationHours:18,price:49.99,published:true,createdAt:now()},
-        {id:uid('c'),title:'Python for Data Analysis',categoryId:cats[1].id,description:'NumPy, pandas, data cleaning and visualization.',durationHours:24,price:69.99,published:false,createdAt:now()},
-        {id:uid('c'),title:'UX Fundamentals',categoryId:cats[2].id,description:'Design thinking, wireframes, and usability testing.',durationHours:12,price:29.99,published:true,createdAt:now()}
-      ];
-      const students = [
-        {id:uid('s'),name:'Alice Johnson',email:'alice@example.com',enrollments:[{courseId:courses[0].id,progress:35,grade:null,enrolledAt:now()}],createdAt:now()},
-        {id:uid('s'),name:'Bob Smith',email:'bob@example.com',enrollments:[{courseId:courses[2].id,progress:100,grade:92,enrolledAt:now()}],createdAt:now()}
-      ];
-      const regs = [
-        {id:uid('r'),studentName:'Charlie Brown',studentEmail:'charlie@example.com',courseId:courses[1].id,message:'I want to learn data analysis',status:'pending',createdAt:now()},
-      ];
-      setCategories(cats); setCourses(courses); setStudents(students); setRegistrations(regs);
-      showToast('Demo data seeded');
-      renderApp();
+
+/* ---------- STUDENTS TABLE ---------- */
+function renderStudents() {
+    const tbody = document.querySelector('#studentsTable tbody');
+    tbody.innerHTML = '';
+    users.filter(u=>u.role==='student').forEach(u=>{
+        const studentCourses = courses.filter(c=>u.courses.includes(c.id)).map(c=>c.title).join(', ');
+        const pending = pendingEnrollments.filter(p=>p.userId===u.id);
+        const pendingHTML = pending.map(p=>{
+            const c = courses.find(c=>c.id===p.courseId);
+            return `<span>${c.title} <button class="approve-btn" onclick="approveEnrollment('${u.id}',${c.id})">✓</button><button class="reject-btn" onclick="rejectEnrollment('${u.id}',${c.id})">✗</button></span>`;
+        }).join('<br>') || '—';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${u.name}</td>
+            <td>${u.email}</td>
+            <td>${studentCourses || '—'}</td>
+            <td>${pendingHTML}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+/* ---------- RENDER ALL TABLES ---------- */
+function renderTables(){
+    renderCourses();
+    renderCategories();
+    renderStudents();
+}
+
+/* ---------- COURSE MODAL ---------- */
+function openCourseModal(){
+    document.getElementById('courseId').value='';
+    document.getElementById('courseTitle').value='';
+    document.getElementById('courseCategory').value='';
+    document.getElementById('courseInstructor').value='';
+    document.getElementById('coursePrice').value='';
+    document.getElementById('courseDuration').value='';
+    document.getElementById('courseDescription').value='';
+    document.getElementById('courseImage').value='';
+    document.getElementById('courseModal').style.display='flex';
+}
+function closeCourseModal(){ document.getElementById('courseModal').style.display='none'; }
+function saveCourse() {
+    const title = document.getElementById('courseTitle').value.trim();
+    const category = document.getElementById('courseCategory').value.trim();
+    const instructor = document.getElementById('courseInstructor').value.trim();
+    const price = Number(document.getElementById('coursePrice').value);
+    const duration = document.getElementById('courseDuration').value.trim();
+    const description = document.getElementById('courseDescription').value.trim();
+    const image = document.getElementById('courseImage').value.trim();
+
+    if (!title || !category || !instructor) {
+        alert('Please fill required fields');
+        return;
     }
 
-    function exportJSON(){
-      const payload = { categories:getCategories(), courses:getCourses(), students:getStudents(), registrations:getRegistrations(), exportedAt: now() };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'elearning-export.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    let courses = JSON.parse(localStorage.getItem('courses')) || [];
+    const idInput = document.getElementById('courseId').value;
+
+    // --- Check for duplicate title (excluding the course being edited) ---
+    const duplicate = courses.find(c => c.title.toLowerCase() === title.toLowerCase() && c.id != idInput);
+    if (duplicate) {
+        alert('A course with this title already exists!');
+        return;
     }
 
-    function importJSON(){
-      const input = document.createElement('input'); input.type='file'; input.accept='application/json';
-      input.addEventListener('change', async (e) => {
-        const f = e.target.files[0]; if(!f) return;
-        const txt = await f.text();
-        try{
-          const json = JSON.parse(txt);
-          if(!confirm('Replace current data with imported file?')) return;
-          setCategories(json.categories || []);
-          setCourses(json.courses || []);
-          setStudents(json.students || []);
-          setRegistrations(json.registrations || []);
-          showToast('Import complete');
-          renderApp();
-        }catch(err){
-          alert('Invalid JSON file');
+    if (idInput) {
+        // Edit existing course
+        const course = courses.find(c => c.id == idInput);
+        if (course) {
+            Object.assign(course, { title, category, instructor, price, duration, description, image });
         }
-      });
-      input.click();
+    } else {
+        // Add new course
+        const newId = courses.length ? Math.max(...courses.map(c => Number(c.id) || 0)) + 1 : 1;
+        const newCourse = { id: newId, title, category, instructor, price, duration, description, image, content: [], enrollRequests: [] };
+        courses.push(newCourse);
     }
 
-    function resetAll(){
-      if(!confirm('Clear ALL e-learning data from this browser?')) return;
-      localStorage.removeItem(LS_KEYS.CATS);
-      localStorage.removeItem(LS_KEYS.COURSES);
-      localStorage.removeItem(LS_KEYS.STUDENTS);
-      localStorage.removeItem(LS_KEYS.REGS);
-      showToast('All data reset');
-      renderApp();
+    localStorage.setItem('courses', JSON.stringify(courses));
+    renderCourses();
+    closeCourseModal();
+}
+
+
+
+/* ---------- EDIT/DELETE COURSE ---------- */
+function editCourse(id){
+    const c = courses.find(c=>c.id==id);
+    document.getElementById('courseId').value=c.id;
+    document.getElementById('courseTitle').value=c.title;
+    document.getElementById('courseCategory').value=c.category;
+    document.getElementById('courseInstructor').value=c.instructor;
+    document.getElementById('coursePrice').value=c.price;
+    document.getElementById('courseDuration').value=c.duration;
+    document.getElementById('courseDescription').value=c.description;
+    document.getElementById('courseImage').value=c.image;
+    document.getElementById('courseModal').style.display='flex';
+}
+function deleteCourse(id){
+    if(confirm('Delete this course?')){
+        courses = courses.filter(c=>c.id!=id);
+        localStorage.setItem('courses',JSON.stringify(courses));
+        renderCourses();
+        updateStats();
+    }
+}
+
+/* ---------- CATEGORY MODAL ---------- */
+function openCategoryModal(){
+    document.getElementById('categoryId').value='';
+    document.getElementById('categoryName').value='';
+    document.getElementById('categoryModal').style.display='flex';
+}
+function closeCategoryModal(){ document.getElementById('categoryModal').style.display='none'; }
+function saveCategory() {
+    const idInput = document.getElementById('categoryId').value;
+    const name = document.getElementById('categoryName').value.trim();
+    if (!name) { alert('Enter category name'); return; }
+
+    // --- Check for duplicate category (excluding the one being edited) ---
+    const duplicate = categories.find((cat, i) => cat.toLowerCase() === name.toLowerCase() && i != idInput);
+    if (duplicate) {
+        alert('This category already exists!');
+        return;
     }
 
-    /* ========================
-       Views
-       ======================== */
-    const views = {
-      dashboard(){ const courses=getCourses(), cats=getCategories(), students=getStudents(), regs=getRegistrations(); return `
-        <h2>Dashboard</h2>
-        <div class="two" style="margin-bottom:12px">
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div><div class="small">Total courses</div><div style="font-size:22px;font-weight:700">${courses.length}</div></div>
-              <div><div class="small">Published</div><div style="font-weight:700">${courses.filter(c=>c.published).length}</div></div>
-            </div>
-          </div>
-          <div class="card">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div><div class="small">Students</div><div style="font-size:22px;font-weight:700">${students.length}</div></div>
-              <div><div class="small">Pending Registrations</div><div style="font-weight:700">${regs.filter(r=>r.status==='pending').length}</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-bottom:12px">
-          <h3>Latest registrations</h3>
-          ${regs.length?`<table><thead><tr><th>When</th><th>Student</th><th>Course</th><th>Status</th><th></th></tr></thead><tbody>${regs.slice().reverse().map(r=>`<tr><td>${formatDate(r.createdAt)}</td><td>${escapeHTML(r.studentName)}<div class="muted">${escapeHTML(r.studentEmail)}</div></td><td>${escapeHTML((courses.find(c=>c.id===r.courseId)||{title:'—'}).title)}</td><td>${r.status}</td><td><button class="btn small" data-act="viewReg" data-id="${r.id}">Manage</button></td></tr>`).join('')}</tbody></table>`:'<div class="muted">No registrations yet.</div>'}
-        </div>
-
-        <div class="card">
-          <h3>Categories overview</h3>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">${cats.map(cat=>`<div class="tag">${escapeHTML(cat.name)}</div>`).join('')}</div>
-        </div>
-      `; },
-
-      categories(){ const cats=getCategories(); return `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <h2>Categories</h2>
-          <div><button class="btn" id="addCategory">Add Category</button></div>
-        </div>
-        <div>
-          <table><thead><tr><th>Name</th><th>Slug</th><th>Created</th><th></th></tr></thead><tbody>
-          ${cats.map(c=>`<tr><td>${escapeHTML(c.name)}</td><td><span class="muted">${escapeHTML(c.slug)}</span></td><td>${formatDate(c.createdAt)}</td><td><button class="btn small" data-act="editCat" data-id="${c.id}">Edit</button> <button class="btn ghost small" data-act="delCat" data-id="${c.id}">Delete</button></td></tr>`).join('')}
-          </tbody></table>
-        </div>
-      `; },
-
-      courses(){ const courses=getCourses(), cats=getCategories(); return `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <h2>Courses</h2>
-          <div><button class="btn" id="addCourse">Add Course</button></div>
-        </div>
-        <div style="margin-bottom:10px"><input id="searchCourse" placeholder="Search by title or description" style="padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);width:100%"></div>
-        <div>
-          <table><thead><tr><th>Title</th><th>Category</th><th>Duration</th><th>Price</th><th>Published</th><th></th></tr></thead><tbody id="coursesTbody">
-          ${courses.map(c=>`<tr data-id="${c.id}"><td>${escapeHTML(c.title)}<div class="muted">${escapeHTML(String(c.description || '').slice(0,130))}${(c.description||'').length>130?'...':''}</div></td><td>${escapeHTML((cats.find(x=>x.id===c.categoryId)||{name:'—'}).name)}</td><td>${c.durationHours}h</td><td>$${Number(c.price).toFixed(2)}</td><td>${c.published?'Yes':'No'}</td><td><button class="btn small" data-act="editCourse" data-id="${c.id}">Edit</button> <button class="btn ghost small" data-act="delCourse" data-id="${c.id}">Delete</button></td></tr>`).join('')}
-          </tbody></table>
-        </div>
-      `; },
-
-      registrations(){ const regs=getRegistrations(), courses=getCourses(); return `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <h2>Registrations</h2>
-          <div><span class="muted">Approve or reject registration requests</span></div>
-        </div>
-        <div>
-          ${regs.length?`<table><thead><tr><th>Date</th><th>Student</th><th>Course</th><th>Message</th><th>Status</th><th></th></tr></thead><tbody>${regs.map(r=>`<tr><td>${formatDate(r.createdAt)}</td><td>${escapeHTML(r.studentName)}<div class="muted">${escapeHTML(r.studentEmail)}</div></td><td>${escapeHTML((courses.find(c=>c.id===r.courseId)||{title:'—'}).title)}</td><td>${escapeHTML(r.message||'—')}</td><td>${r.status}</td><td>${r.status==='pending'?`<button class="btn small" data-act="approveReg" data-id="${r.id}">Approve</button> <button class="btn ghost small" data-act="rejectReg" data-id="${r.id}">Reject</button>`:'<span class="muted">—</span>'}</td></tr>`).join('')}</tbody></table>`:'<div class="muted">No registrations yet</div>'}
-        </div>
-      `; },
-
-      students(){ const students=getStudents(), courses=getCourses(); return `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <h2>Students & Progress</h2>
-          <div><button class="btn" id="addStudent">Add Student</button></div>
-        </div>
-        <div>
-          ${students.length?`<table><thead><tr><th>Name</th><th>Email</th><th>Enrollments</th><th></th></tr></thead><tbody>${students.map(s=>`<tr><td>${escapeHTML(s.name)}</td><td><div class="muted">${escapeHTML(s.email)}</div></td><td>${s.enrollments && s.enrollments.length? s.enrollments.map(e=>{const c=courses.find(cc=>cc.id===e.courseId)||{title:'—'}; return `<div style="margin-bottom:6px"><strong>${escapeHTML(c.title)}</strong> — ${e.progress}% ${e.grade?` • Grade: ${e.grade}`:''} <div class="muted" style="font-size:12px">Enrolled: ${formatDate(e.enrolledAt)}</div></div>`}).join('') : '<span class="muted">No enrollments</span>'}</td><td><button class="btn small" data-act="viewStudent" data-id="${s.id}">Manage</button></td></tr>`).join('')}</tbody></table>`:'<div class="muted">No students yet</div>'}
-        </div>
-      `; }
-    };
-
-    /* ========================
-       Render & wiring
-       ======================== */
-    function renderApp(viewName){
-      const active = viewName || (document.querySelector('.nav button.active')?.dataset.view) || 'dashboard';
-      qa('.nav button').forEach(b => b.classList.toggle('active', b.dataset.view===active));
-      q('#view-root').innerHTML = views[active]();
-      updateKpis();
-      attachViewActions(active);
+    if (idInput) {
+        categories[idInput] = name;
+    } else {
+        categories.push(name);
     }
 
-    function updateKpis(){
-      q('#k-courses').textContent = getCourses().length;
-      q('#k-categories').textContent = getCategories().length;
-      q('#k-students').textContent = getStudents().length;
-      q('#k-pending').textContent = getRegistrations().filter(r=>r.status==='pending').length;
-    }
+    localStorage.setItem('categories', JSON.stringify(categories));
+    closeCategoryModal();
+    renderCategories();
+    updateStats();
+}
 
-    function attachViewActions(active){
-      qa('[data-act="viewReg"]').forEach(b => b.addEventListener('click', ()=> manageRegistration(b.dataset.id)));
-      if(active === 'categories'){
-        q('#addCategory')?.addEventListener('click', ()=> openCategoryModal());
-        qa('[data-act="editCat"]').forEach(b => b.addEventListener('click', ()=> openCategoryModal(b.dataset.id)));
-        qa('[data-act="delCat"]').forEach(b => b.addEventListener('click', ()=> deleteCategory(b.dataset.id)));
-      }
-      if(active === 'courses'){
-        q('#addCourse')?.addEventListener('click', ()=> openCourseModal());
-        q('#searchCourse')?.addEventListener('input', onSearchCourse);
-        qa('[data-act="editCourse"]').forEach(b => b.addEventListener('click', ()=> openCourseModal(b.dataset.id)));
-        qa('[data-act="delCourse"]').forEach(b => b.addEventListener('click', ()=> deleteCourse(b.dataset.id)));
-      }
-      if(active === 'registrations'){
-        qa('[data-act="approveReg"]').forEach(b => b.addEventListener('click', ()=> approveRegistration(b.dataset.id)));
-        qa('[data-act="rejectReg"]').forEach(b => b.addEventListener('click', ()=> rejectRegistration(b.dataset.id)));
-      }
-      if(active === 'students'){
-        q('#addStudent')?.addEventListener('click', ()=> openStudentModal());
-        qa('[data-act="viewStudent"]').forEach(b => b.addEventListener('click', ()=> openStudentModal(b.dataset.id)));
-      }
-    }
+/* ---------- PENDING ENROLLMENTS ---------- */
+function approveEnrollment(userId, courseId){
+    const user = users.find(u=>u.id===userId);
+    if(user && !user.courses.includes(courseId)) user.courses.push(courseId);
+    pendingEnrollments = pendingEnrollments.filter(p=>!(p.userId===userId && p.courseId===courseId));
+    localStorage.setItem('users',JSON.stringify(users));
+    localStorage.setItem('pendingEnrollments',JSON.stringify(pendingEnrollments));
+    renderStudents();
+    updateStats();
+}
+function rejectEnrollment(userId, courseId){
+    pendingEnrollments = pendingEnrollments.filter(p=>!(p.userId===userId && p.courseId===courseId));
+    localStorage.setItem('pendingEnrollments',JSON.stringify(pendingEnrollments));
+    renderStudents();
+    updateStats();
+}
 
-    function onSearchCourse(e){
-      const qv = e.target.value.toLowerCase();
-      qa('#coursesTbody tr').forEach(tr=>{
-        const id = tr.dataset.id;
-        const c = getCourses().find(x=>x.id===id);
-        const visible = (c.title||'').toLowerCase().includes(qv) || (c.description||'').toLowerCase().includes(qv);
-        tr.style.display = visible ? 'table-row' : 'none';
-      });
-    }
+/* ---------- LOGOUT ---------- */
+function logout(){
+    localStorage.removeItem('currentUser');
+    location.href='login.html';
+}
 
-    /* ========================
-       Categories CRUD
-       ======================== */
-    function openCategoryModal(id){
-      const cats = getCategories(); const editing = id ? cats.find(c=>c.id===id) : null;
-      showModal(`
-        <h3>${editing? 'Edit Category' : 'New Category'}</h3>
-        <div>
-          <label>Name</label>
-          <input id="cat_name" value="${editing? escapeHTML(editing.name) : ''}">
-        </div>
-        <div style="margin-top:8px">
-          <label>Slug (unique)</label>
-          <input id="cat_slug" value="${editing? escapeHTML(editing.slug) : ''}">
-        </div>
-        <div style="margin-top:10px;display:flex;justify-content:flex-end;gap:8px">
-          <button class="btn" id="saveCat">Save</button>
-        </div>
-      `);
-      q('#saveCat').addEventListener('click', ()=>{
-        const name = q('#cat_name').value.trim(); let slug = q('#cat_slug').value.trim();
-        if(!name){ alert('Name is required'); return; }
-        slug = slug.replace(/\s+/g,'-').toLowerCase();
-        if(!slug){ alert('Slug is required'); return; }
-        const other = cats.find(c => c.slug === slug && (!editing || c.id !== editing.id));
-        if(other){ alert('Slug must be unique'); return; }
-        if(editing){ editing.name = name; editing.slug = slug; setCategories(cats); showToast('Category updated'); }
-        else{ cats.push({id:uid('cat'), name, slug, createdAt: now()}); setCategories(cats); showToast('Category added'); }
-        closeModal(); renderApp('categories');
-      });
-    }
+/* ---------- INITIAL RENDER ---------- */
+updateStats();
+renderTables();
 
-    function deleteCategory(id){
-      const cats = getCategories(); const courses = getCourses();
-      if(courses.some(c=>c.categoryId===id)){ alert('Cannot delete category used by existing courses. Reassign or delete those courses first.'); return; }
-      if(!confirm('Delete this category?')) return;
-      setCategories(cats.filter(c=>c.id!==id));
-      showToast('Category deleted');
-      renderApp('categories');
-    }
-
-    /* ========================
-       Courses CRUD
-       ======================== */
-    function openCourseModal(id){
-      const cats = getCategories(); if(!cats.length){ if(!confirm('No categories exist. Create one now?')) return; openCategoryModal(); return; }
-      const courses = getCourses(); const editing = id ? courses.find(c=>c.id===id) : null;
-      showModal(`
-        <h3>${editing? 'Edit Course' : 'New Course'}</h3>
-        <div style="display:grid;gap:10px">
-          <div>
-            <label>Title</label>
-            <input id="course_title" value="${editing? escapeHTML(editing.title) : ''}">
-          </div>
-          <div>
-            <label>Category</label>
-            <select id="course_cat">${cats.map(cat=>`<option value="${cat.id}" ${editing && editing.categoryId===cat.id? 'selected':''}>${escapeHTML(cat.name)}</option>`).join('')}</select>
-          </div>
-          <div class="two">
-            <div>
-              <label>Duration (hours)</label>
-              <input id="course_duration" type="number" min="1" value="${editing? escapeHTML(editing.durationHours) : 10}">
-            </div>
-            <div>
-              <label>Price (USD)</label>
-              <input id="course_price" type="number" step="0.01" min="0" value="${editing? escapeHTML(editing.price) : 0}">
-            </div>
-          </div>
-          <div>
-            <label>Description</label>
-            <textarea id="course_desc">${editing? escapeHTML(editing.description) : ''}</textarea>
-          </div>
-          <div style="display:flex;gap:8px;align-items:center">
-            <input id="course_pub" type="checkbox" ${editing && editing.published? 'checked':''}>
-            <label class="muted">Published</label>
-          </div>
-        </div>
-        <div style="margin-top:10px;display:flex;justify-content:flex-end;gap:8px">
-          <button class="btn" id="saveCourse">Save</button>
-        </div>
-      `);
-      q('#saveCourse').addEventListener('click', ()=>{
-        const title = q('#course_title').value.trim();
-        const catId = q('#course_cat').value;
-        const duration = Number(q('#course_duration').value);
-        const price = Number(q('#course_price').value);
-        const desc = q('#course_desc').value.trim();
-        const pub = q('#course_pub').checked;
-        if(!title){ alert('Title required'); return; }
-        if(!desc){ alert('Description required'); return; }
-        if(!catId){ alert('Category required'); return; }
-        if(!Number.isFinite(duration) || duration <= 0){ alert('Duration must be a positive number'); return; }
-        if(!Number.isFinite(price) || price < 0){ alert('Price must be 0 or more'); return; }
-        if(editing){
-          editing.title = title; editing.categoryId = catId; editing.durationHours = duration; editing.price = price; editing.description = desc; editing.published = pub;
-          setCourses(courses); showToast('Course updated');
-        } else {
-          courses.push({id:uid('c'), title, categoryId:catId, durationHours:duration, price, description:desc, published:pub, createdAt: now()});
-          setCourses(courses); showToast('Course added');
-        }
-        closeModal(); renderApp('courses');
-      });
-    }
-
-    function deleteCourse(id){
-      if(!confirm('Delete this course? This will remove it for all students.')) return;
-      setCourses(getCourses().filter(c=>c.id!==id));
-      const students = getStudents();
-      students.forEach(s => { s.enrollments = (s.enrollments||[]).filter(e=>e.courseId!==id); });
-      setStudents(students);
-      showToast('Course deleted');
-      renderApp('courses');
-    }
-
-    /* ========================
-       Registrations
-       ======================== */
-    function approveRegistration(id){
-      const regs = getRegistrations(); const reg = regs.find(r=>r.id===id); if(!reg) return;
-      reg.status = 'approved'; setRegistrations(regs);
-      let students = getStudents();
-      let student = students.find(s => s.email.toLowerCase() === reg.studentEmail.toLowerCase());
-      if(!student){
-        student = {id:uid('s'), name:reg.studentName, email:reg.studentEmail, enrollments:[], createdAt: now()};
-        students.push(student);
-      }
-      student.enrollments = student.enrollments || [];
-      if(!student.enrollments.find(e=>e.courseId===reg.courseId)){
-        student.enrollments.push({courseId: reg.courseId, progress:0, grade:null, enrolledAt: now()});
-      }
-      setStudents(students);
-      showToast('Registration approved — student enrolled');
-      renderApp('registrations');
-    }
-
-    function rejectRegistration(id){
-      const regs = getRegistrations(); const reg = regs.find(r=>r.id===id); if(!reg) return;
-      reg.status = 'rejected'; setRegistrations(regs);
-      showToast('Registration rejected');
-      renderApp('registrations');
-    }
-
-    function manageRegistration(id){
-      const reg = getRegistrations().find(r=>r.id===id); if(!reg) return;
-      const course = getCourses().find(c=>c.id===reg.courseId) || {title:'—'};
-      showModal(`
-        <h3>Manage registration</h3>
-        <div><strong>${escapeHTML(reg.studentName)}</strong> <div class="muted">${escapeHTML(reg.studentEmail)}</div></div>
-        <div style="margin-top:8px"><strong>Course</strong><div>${escapeHTML(course.title)}</div></div>
-        <div style="margin-top:8px"><strong>Message</strong><div class="muted">${escapeHTML(reg.message || '—')}</div></div>
-        <div style="margin-top:10px;display:flex;justify-content:flex-end;gap:8px"><button class="btn" id="mApprove">Approve</button><button class="btn ghost" id="mReject">Reject</button></div>
-      `);
-      q('#mApprove').addEventListener('click', ()=> { approveRegistration(id); closeModal(); });
-      q('#mReject').addEventListener('click', ()=> { rejectRegistration(id); closeModal(); });
-    }
-
-    /* ========================
-       Students modal & final save logic (with EMAIL existence validation)
-       ======================== */
-    function openStudentModal(id){
-      const students = getStudents();
-      const courses = getCourses();
-      const editing = id ? students.find(s=>s.id===id) : null;
-      // capture editingId for reliable lookup on save
-      const editingId = editing ? editing.id : null;
-
-      showModal(`
-        <h3>${editing? 'Manage Student' : 'New Student'}</h3>
-        <div style="display:grid;gap:10px">
-          <div><label>Name</label><input id="stu_name" value="${editing? escapeHTML(editing.name) : ''}"></div>
-          <div><label>Email</label><input id="stu_email" value="${editing? escapeHTML(editing.email) : ''}"></div>
-          <div>
-            <label>Enroll to course</label>
-            <select id="stu_course"><option value="">-- choose (optional) --</option>${courses.map(c=>`<option value="${c.id}">${escapeHTML(c.title)}</option>`).join('')}</select>
-          </div>
-          <div id="stuEnrolls">${ editing ? (editing.enrollments||[]).map(e=>`<div style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center"><div><strong>${escapeHTML((courses.find(cc=>cc.id===e.courseId)||{title:'—'}).title)}</strong></div><div><label class="muted">Progress</label><input style="width:80px" type="number" min="0" max="100" class="en_prog" data-course-id="${e.courseId}" value="${e.progress}"></div></div></div>`).join('') : '' }</div>
-        </div>
-        <div style="margin-top:10px;display:flex;justify-content:flex-end;gap:8px"><button class="btn" id="saveStudent">Save</button></div>
-      `);
-
-      q('#stu_course')?.addEventListener('change', ()=> {
-        const v = q('#stu_course').value; if(!v) return;
-        const course = courses.find(c=>c.id===v);
-        const enrollHtml = `<div style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);margin-bottom:6px"><div style="display:flex;justify-content:space-between;align-items:center"><div><strong>${escapeHTML(course.title)}</strong></div><div><label class="muted">Progress</label><input style="width:80px" type="number" min="0" max="100" class="en_prog" data-course-id="${course.id}" value="0"></div></div></div>`;
-        q('#stuEnrolls').insertAdjacentHTML('beforeend', enrollHtml);
-        q('#stu_course').value='';
-      });
-
-      // Save handler uses editingId to fetch and update the real student object from storage
-      q('#saveStudent').addEventListener('click', ()=> {
-        const name = q('#stu_name').value.trim(); 
-        const emailRaw = q('#stu_email').value.trim();
-        if(!name || !emailRaw){ alert('Name and email required'); return; }
-        const email = emailRaw.toLowerCase();
-
-        const studentsNow = getStudents(); // fresh array from storage
-
-        // ✅ Validate: email must exist in the system already (student must be registered)
-        const existingStudent = studentsNow.find(s => s.email.toLowerCase() === email);
-        if(!existingStudent){
-          alert('This email is not registered. Please add the student first in Students list.');
-          return;
-        }
-        // If editingId exists but email belongs to different student -> error
-        if(editingId && existingStudent.id !== editingId){
-          alert('The email you entered belongs to another student. Please use the correct email for this student.');
-          return;
-        }
-
-        // now operate on the actual student object
-        const student = existingStudent;
-
-        // collect enroll inputs currently in modal
-        const enrollInputs = qa('.en_prog', q('#modalContent'));
-        let enrollments = Array.isArray(student.enrollments) ? [...student.enrollments] : [];
-
-        enrollInputs.forEach(inp => {
-          const courseId = inp.dataset.courseId;
-          const progress = Math.max(0, Math.min(100, Number(inp.value) || 0));
-          const existing = enrollments.find(e => e.courseId === courseId);
-          if(existing){
-            existing.progress = progress;
-          } else {
-            enrollments.push({ courseId, progress, grade: null, enrolledAt: now() });
-          }
-        });
-
-        // dedupe by courseId
-        const unique = {};
-        enrollments.forEach(e => { unique[e.courseId] = e; });
-        student.enrollments = Object.values(unique);
-
-        // update name/email if needed (email already validated)
-        student.name = name;
-        student.email = existingStudent.email; // keep original normalized casing
-
-        setStudents(studentsNow);
-        showToast('Student progress updated');
-        closeModal();
-        renderApp('students');
-      });
-    }
-
-    /* Global bindings */
-    q('#seedBtn').addEventListener('click', seedDemo);
-    q('#exportBtn').addEventListener('click', exportJSON);
-    q('#importBtn').addEventListener('click', importJSON);
-    q('#resetBtn').addEventListener('click', resetAll);
-
-    qa('.nav button').forEach(b => b.addEventListener('click', e => {
-      qa('.nav button').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-      renderApp(b.dataset.view);
-    }));
-
-    q('#modalClose').addEventListener('click', ()=> closeModal());
-    q('#modalBackdrop').addEventListener('click', (e)=> { if(e.target.id === 'modalBackdrop') closeModal(); });
-
-    // init
-    (function init(){
-      if(!localStorage.getItem(LS_KEYS.CATS) && !localStorage.getItem(LS_KEYS.COURSES)){
-        setCategories([{id:uid('cat'),name:'General',slug:'general',createdAt:now()}]);
-      }
-      renderApp();
-    })();
-  </script>
+</script>
 </body>
 </html>
