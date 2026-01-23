@@ -1,3 +1,6 @@
+var pendingEnrollments=JSON.parse(localStorage.getItem('pendingEnrollments'))||[];
+let users=JSON.parse(localStorage.getItem('users'))||[];
+
 // Courses Data
 const courses = [
     {
@@ -297,7 +300,11 @@ function showCourseDetails(courseId) {
 
 // Enroll in course
 function enrollCourse() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
+    const user = JSON.parse(localStorage.getItem('currentUser'))
+
+    let a=users.filter((i)=>
+      i.id==user.id)
+user.courses=a[0].courses
 
     if (!user) {
         // alert('Please login to enroll in courses!');
@@ -306,28 +313,30 @@ function enrollCourse() {
     }
 
     const course = allCourses.find((c) => c.id === selectedCourseId);
-
     // Check if already enrolled
     if (user.courses.includes(selectedCourseId)) {
-        // alert('You are already enrolled in this course!');
+         alert('You are already enrolled in this course!');
         return;
     }
-
-    // Add course to user
-    user.courses.push(selectedCourseId);
-    localStorage.setItem('currentUser', JSON.stringify(user));
-
-    // Update user in users array
-    let users = JSON.parse(localStorage.getItem('users'));
-    const userIndex = users.findIndex((u) => u.id === user.id);
-    if (userIndex !== -1) {
-        users[userIndex] = user;
-        localStorage.setItem('users', JSON.stringify(users));
+    let obj={
+        id:user.id,
+        courseId:selectedCourseId
     }
-
-    // alert(`Successfully enrolled in ${course.title}!`);
-    document.getElementById('courseModal').style.display = 'none';
+    let f=0
+    let chk=pendingEnrollments.forEach((i)=>{
+       if( i.id==user.id&&i.courseId==selectedCourseId)
+{
+    f=1;
 }
+    })
+    if(f)
+        {alert("please wait admin decision")
+return;}
+else{
+    pendingEnrollments.push(obj)
+                      localStorage.setItem("pendingEnrollments",JSON.stringify(pendingEnrollments))
+                      user.courses.push(selectedCourseId)
+}}
 
 // Filter functionality
 document

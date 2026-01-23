@@ -155,6 +155,11 @@
 
 <script>
 /* ---------- INITIAL DATA ---------- */
+if(JSON.parse(localStorage.getItem("currentUser")).role!='admin')
+{
+  alert("you donnot have access for dashboard admin")
+}
+else{
 let courses = JSON.parse(localStorage.getItem('courses')) || [];
 let categories = JSON.parse(localStorage.getItem('categories')) || [];
 let users = JSON.parse(localStorage.getItem('users')) || [];
@@ -257,7 +262,7 @@ function renderStudents() {
     tbody.innerHTML = '';
     users.filter(u=>u.role==='student').forEach(u=>{
         const studentCourses = courses.filter(c=>u.courses.includes(c.id)).map(c=>c.title).join(', ');
-        const pending = pendingEnrollments.filter(p=>p.userId===u.id);
+        const pending = pendingEnrollments.filter((p)=>p.id===u.id);
         const pendingHTML = pending.map(p=>{
             const c = courses.find(c=>c.id===p.courseId);
             return `<span>${c.title} <button class="approve-btn" onclick="approveEnrollment('${u.id}',${c.id})">✓</button><button class="reject-btn" onclick="rejectEnrollment('${u.id}',${c.id})">✗</button></span>`;
@@ -394,29 +399,30 @@ function saveCategory() {
 function approveEnrollment(userId, courseId){
     const user = users.find(u=>u.id===userId);
     if(user && !user.courses.includes(courseId)) user.courses.push(courseId);
-    pendingEnrollments = pendingEnrollments.filter(p=>!(p.userId===userId && p.courseId===courseId));
+    pendingEnrollments = pendingEnrollments.filter(p=>!(p.id===userId && p.courseId===courseId));
     localStorage.setItem('users',JSON.stringify(users));
     localStorage.setItem('pendingEnrollments',JSON.stringify(pendingEnrollments));
     renderStudents();
     updateStats();
 }
 function rejectEnrollment(userId, courseId){
-    pendingEnrollments = pendingEnrollments.filter(p=>!(p.userId===userId && p.courseId===courseId));
+    pendingEnrollments = pendingEnrollments.filter(p=>!(p.id===userId && p.courseId===courseId));
     localStorage.setItem('pendingEnrollments',JSON.stringify(pendingEnrollments));
     renderStudents();
     updateStats();
 }
 
 /* ---------- LOGOUT ---------- */
-function logout(){
-    localStorage.removeItem('currentUser');
-    location.href='login.html';
-}
+
 
 /* ---------- INITIAL RENDER ---------- */
 updateStats();
 renderTables();
-
+}
+function logout(){
+    localStorage.removeItem('currentUser');
+    location.href='login.html';
+}
 </script>
 </body>
 </html>

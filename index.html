@@ -157,6 +157,11 @@
             const loginBtn = document.getElementById('loginbtn');
             const navLinks = document.querySelector('.nav-links');
             const user = JSON.parse(localStorage.getItem('currentUser'));
+            const admin = JSON.parse(localStorage.getItem('users'));
+
+            let getadmin=admin.filter((i)=>i.name=="admin")
+            getadmin[0].role="admin"
+            localStorage.setItem("users",JSON.stringify(admin))
 
             // Handle navbar based on login status
             if (user) {
@@ -286,7 +291,7 @@
             // Display courses
 
             function displayCourses(courses) {
-                console.log(courses);
+                //console.log(courses);
 
                 const grid = document.getElementById('coursesGrid');
                 grid.innerHTML = '';
@@ -345,6 +350,7 @@
 
                 if (course.price === 0) {
                     // Free course - enroll directly
+
                     enrollInCourse(courseId);
                 } else {
                     // Paid course - go to payment
