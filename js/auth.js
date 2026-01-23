@@ -11,8 +11,14 @@ function checkIfLoggedIn() {
     if (currentUser) {
         // Check if currentUser is valid JSON
         try {
-            JSON.parse(currentUser);
-            location.href = '../index.html';
+            const user = JSON.parse(currentUser);
+
+            // Redirect based on role
+            if (user.role === 'admin') {
+                location.href = '../admin/dashboard.html';
+            } else {
+                location.href = '../index.html';
+            }
         } catch (e) {
             // Invalid currentUser, remove it
             localStorage.removeItem('currentUser');
@@ -72,8 +78,13 @@ function login(event) {
     // Save currentUser in localStorage
     localStorage.setItem('currentUser', JSON.stringify(foundUser));
 
+    // Redirect based on user role
     setTimeout(() => {
-        location.href = '../index.html';
+        if (foundUser.role === 'admin') {
+            location.href = '../admin/dashboard.html';
+        } else {
+            location.href = '../index.html';
+        }
     }, 800);
 }
 
@@ -179,7 +190,7 @@ function signup(event) {
         // Save new user as currentUser in localStorage
         localStorage.setItem('currentUser', JSON.stringify(newUser));
 
-        // Redirect to home page
+        // Redirect to home page (students always go to index.html)
         setTimeout(() => {
             location.href = '../index.html';
         }, 500);

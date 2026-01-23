@@ -146,22 +146,22 @@
 
             // Display content list
             function displayContentList() {
-                console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDdde');
+                // console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDdde');
 
                 const contentList = document.getElementById('contentList');
                 contentList.innerHTML = '';
-                console.log('qqq');
-                console.log(course);
+                // console.log('qqq');
+                // console.log(course);
 
                 course.content.forEach((item, index) => {
-                    console.log('ssssssssssssssssssssssssw');
+                    // console.log('ssssssssssssssssssssssssw');
 
                     const li = document.createElement('li');
                     li.className = 'content-item';
                     if (index === currentContentIndex) {
                         li.classList.add('active');
                     }
-                    console.log('EEEEEEEEEEw');
+                    // console.log('EEEEEEEEEEw');
 
                     const isCompleted =
                         userProgress.completedItems.includes(index);
@@ -178,13 +178,13 @@
                     </div>
                     ${isCompleted ? '<span class="completion-badge">✓ Completed</span>' : ''}
                 `;
-                    console.log('ddw');
+                    // console.log('ddw');
 
                     li.onclick = () => loadContent(index);
-                    console.log('dd');
+                    // console.log('dd');
 
                     contentList.appendChild(li);
-                    console.log(contentList);
+                    // console.log(contentList);
                 });
 
                 updateProgress();
@@ -192,7 +192,7 @@
 
             // Load content
             function loadContent(index) {
-                console.log('dds');
+                // console.log('dds');
 
                 currentContentIndex = index;
                 const item = course.content[index];
@@ -235,7 +235,7 @@
                         <p class="content-description">
                             This is a PDF resource. Download or view the material to continue learning.
                         </p>
-                        <a href="${item.link}" class="btn" style="display: inline-block; margin: 2rem 0;" target="_blank">
+                        <a href="${item.link}" download class="btn" style="display: inline-block; margin: 2rem 0;" target="_blank">
                             📄 View PDF
                         </a>
                     </div>
@@ -308,7 +308,7 @@
             // Logout function
             function logout() {
                 localStorage.removeItem('currentUser');
-                window.location.href = 'login.html';
+                window.location.href = '../login.html';
             }
 
             // Initialize page

@@ -36,7 +36,11 @@ const courses = [
                 type: 'video',
                 link: 'https://www.youtube.com/embed/ExcRbA7fy_A',
             },
-            { title: 'Final Project Guide', type: 'pdf', link: '#' },
+            {
+                title: 'Final Project Guide',
+                type: 'pdf',
+                link: 'https://edu.anarcho-copy.org/Programming%20Languages/Node/Pro%20MERN%20Stack,%202nd%20Edition.pdf',
+            },
         ],
     },
     {
@@ -141,7 +145,11 @@ const courses = [
                 type: 'video',
                 link: 'https://www.youtube.com/embed/A9lMH0ye1HU',
             },
-            { title: 'Practice Labs', type: 'pdf', link: '#' },
+            {
+                title: 'Practice Labs',
+                type: 'pdf',
+                link: 'https://edu.anarcho-copy.org/Programming%20Languages/Node/Pro%20MERN%20Stack,%202nd%20Edition.pdf',
+            },
         ],
     },
     {
@@ -301,7 +309,7 @@ function enrollCourse() {
 
     if (!user) {
         // alert('Please login to enroll in courses!');
-        window.location.href = 'login.html';
+        window.location.href = '../login.html';
         return;
     }
 
@@ -309,7 +317,7 @@ function enrollCourse() {
 
     // Check if already enrolled
     if (user.courses.includes(selectedCourseId)) {
-        // alert('You are already enrolled in this course!');
+        alert('You are already enrolled in this course!');
         return;
     }
 
@@ -404,7 +412,7 @@ if (user) {
 
 function logout() {
     localStorage.removeItem('currentUser');
-    location.href = 'login.html';
+    location.href = '../login.html';
 }
 
 // Display all courses on page load

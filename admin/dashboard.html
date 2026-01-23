@@ -1,11 +1,286 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Dashboard</h1>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Dashboard - Itians</title>
+        <link rel="stylesheet" href="../css/dashboard.css" />
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="container">
+                <a href="../index.html" class="brand">Itians Admin</a>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Dashboard</a></li>
+                    <li>
+                        <span
+                            id="adminName"
+                            style="color: #6610f2; font-weight: 600"
+                        ></span>
+                    </li>
+                    <li>
+                        <a href="#" class="btn" onclick="logout()">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- DASHBOARD CONTAINER -->
+        <div class="dashboard-wrapper">
+            <!-- SIDEBAR -->
+            <aside class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="menu-item active" data-section="overview">
+                        <span class="icon">📊</span>
+                        <span>Overview</span>
+                    </li>
+                    <li class="menu-item" data-section="courses">
+                        <span class="icon">📚</span>
+                        <span>Manage Courses</span>
+                    </li>
+                    <li class="menu-item" data-section="categories">
+                        <span class="icon">🏷️</span>
+                        <span>Manage Categories</span>
+                    </li>
+                    <li class="menu-item" data-section="students">
+                        <span class="icon">👥</span>
+                        <span>Students</span>
+                    </li>
+                    <li class="menu-item" data-section="enrollments">
+                        <span class="icon">✅</span>
+                        <span>Enrollments</span>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <main class="main-content">
+                <!-- OVERVIEW SECTION -->
+                <section id="overview" class="content-section active">
+                    <div class="page-header">
+                        <h1>Dashboard Overview</h1>
+                        <p>
+                            Welcome back! Here's what's happening with your
+                            platform.
+                        </p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #3498db">
+                                📚
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalCourses">0</h3>
+                                <p>Total Courses</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #27ae60">
+                                👥
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalStudents">0</h3>
+                                <p>Total Students</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #f39c12">
+                                ✅
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalEnrollments">0</h3>
+                                <p>Total Enrollments</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #e74c3c">
+                                🏷️
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalCategories">0</h3>
+                                <p>Categories</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-section">
+                        <h2>Recent Courses</h2>
+                        <div id="recentCourses" class="courses-grid"></div>
+                    </div>
+                </section>
+
+                <!-- COURSES SECTION -->
+                <section id="courses" class="content-section">
+                    <div class="page-header">
+                        <h1>Manage Courses</h1>
+                        <button class="btn" onclick="openCourseModal()">
+                            + Add New Course
+                        </button>
+                    </div>
+
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label>Search:</label>
+                            <input
+                                type="text"
+                                id="courseSearch"
+                                placeholder="Search courses..."
+                            />
+                        </div>
+                        <div class="filter-group">
+                            <label>Category:</label>
+                            <select id="courseCategoryFilter">
+                                <option value="all">All Categories</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="coursesTable" class="data-table"></div>
+                </section>
+
+                <!-- CATEGORIES SECTION -->
+                <section id="categories" class="content-section">
+                    <div class="page-header">
+                        <h1>Manage Categories</h1>
+                        <button class="btn" onclick="openCategoryModal()">
+                            + Add New Category
+                        </button>
+                    </div>
+
+                    <div id="categoriesGrid" class="categories-grid"></div>
+                </section>
+
+                <!-- STUDENTS SECTION -->
+                <section id="students" class="content-section">
+                    <div class="page-header">
+                        <h1>Students Management</h1>
+                        <p>View and manage all registered students</p>
+                    </div>
+
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label>Search:</label>
+                            <input
+                                type="text"
+                                id="studentSearch"
+                                placeholder="Search students..."
+                            />
+                        </div>
+                    </div>
+
+                    <div id="studentsTable" class="data-table"></div>
+                </section>
+
+                <!-- ENROLLMENTS SECTION -->
+                <section id="enrollments" class="content-section">
+                    <div class="page-header">
+                        <h1>Course Enrollments</h1>
+                        <p>Monitor all student enrollments</p>
+                    </div>
+
+                    <div id="enrollmentsTable" class="data-table"></div>
+                </section>
+            </main>
+        </div>
+
+        <!-- COURSE MODAL -->
+        <div id="courseModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeCourseModal()">&times;</span>
+                <h2 id="courseModalTitle">Add New Course</h2>
+                <form id="courseForm" onsubmit="saveCourse(event)">
+                    <div class="form-group">
+                        <label>Course Title *</label>
+                        <input type="text" id="courseTitle" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="courseCategory" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Instructor *</label>
+                        <input type="text" id="courseInstructor" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea
+                            id="courseDescription"
+                            rows="4"
+                            required
+                        ></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL *</label>
+                        <input type="url" id="courseImage" required />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Price ($) *</label>
+                            <input
+                                type="number"
+                                id="coursePrice"
+                                min="0"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label>Duration *</label>
+                            <input
+                                type="text"
+                                id="courseDuration"
+                                placeholder="e.g., 12 weeks"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <input type="hidden" id="courseId" />
+                    <button type="submit" class="btn btn-submit">
+                        Save Course
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- CATEGORY MODAL -->
+        <div id="categoryModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeCategoryModal()">
+                    &times;
+                </span>
+                <h2 id="categoryModalTitle">Add New Category</h2>
+                <form id="categoryForm" onsubmit="saveCategory(event)">
+                    <div class="form-group">
+                        <label>Category Name *</label>
+                        <input type="text" id="categoryName" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea
+                            id="categoryDescription"
+                            rows="3"
+                            required
+                        ></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Icon (Emoji)</label>
+                        <input
+                            type="text"
+                            id="categoryIcon"
+                            maxlength="2"
+                            placeholder="e.g., 💻"
+                        />
+                    </div>
+                    <input type="hidden" id="categoryId" />
+                    <button type="submit" class="btn btn-submit">
+                        Save Category
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <script src="../js/admin-setup.js"></script>
+        <script src="../js/admin-dashboard.js"></script>
+    </body>
 </html>
