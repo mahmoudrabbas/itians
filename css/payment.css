@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .payment-container {
+    background: #fff;
+    width: 900px;
+    max-width: 95%;
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  }
+  
+  /* Order Summary */
+  .order-summary {
+    background: #f7f7f7;
+    width: 40%;
+    padding: 30px;
+  }
+  
+  .order-summary h2 {
+    margin-bottom: 20px;
+  }
+  
+  .item,
+  .total {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+  }
+  
+  .total {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+  }
+  
+  /* Payment Form */
+  .payment-form {
+    width: 60%;
+    padding: 30px;
+  }
+  
+  .payment-form h2 {
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+  }
+  
+  .form-group input:focus {
+    border-color: #667eea;
+  }
+  
+  .row {
+    display: flex;
+    gap: 15px;
+  }
+  
+  button {
+    width: 100%;
+    padding: 14px;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+  }
+  
+  button:hover {
+    background: #5a67d8;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .payment-container {
+      flex-direction: column;
+    }
+  
+    .order-summary,
+    .payment-form {
+      width: 100%;
+    }
+  }
+  
