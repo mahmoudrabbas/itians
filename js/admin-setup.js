@@ -1,6 +1,3 @@
-// Admin Seeds Data & Authentication
-// Place this code in a separate file: js/admin-setup.js
-
 // Initialize Admin User
 function initializeAdmin() {
     let users = JSON.parse(localStorage.getItem('users')) || [];
@@ -13,7 +10,7 @@ function initializeAdmin() {
             id: 'admin_' + Date.now(),
             name: 'Admin',
             email: 'admin@gmail.com',
-            password: 'admin123', // In production, hash this!
+            password: 'admin123',
             role: 'admin',
             courses: [],
             createdAt: new Date().toISOString(),
@@ -21,7 +18,7 @@ function initializeAdmin() {
 
         users.push(admin);
         localStorage.setItem('users', JSON.stringify(users));
-        console.log('✅ Admin user created successfully');
+        // console.log('Admin user created successfully');
     }
 }
 
@@ -56,7 +53,7 @@ function initializeCategories() {
 
     if (!localStorage.getItem('categories')) {
         localStorage.setItem('categories', JSON.stringify(categories));
-        console.log('✅ Categories initialized');
+        // console.log('Categories initialized');
     }
 }
 
@@ -78,7 +75,58 @@ function protectAdminRoute() {
 initializeAdmin();
 initializeCategories();
 
+// Handle course enrollment with payment check
+function handleEnrollment(courseId) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+
+    if (!user) {
+        alert('Please login to enroll in courses!');
+        window.location.href = '../login.html';
+        return;
+    }
+
+    const courses = JSON.parse(localStorage.getItem('courses')) || [];
+    const course = courses.find((c) => c.id === courseId);
+
+    if (!course) {
+        alert('Course not found!');
+        return;
+    }
+
+    // Check if already enrolled
+    if (user.courses.includes(courseId)) {
+        alert('You are already enrolled in this course!');
+        return;
+    }
+
+    // Check if course is paid
+    if (course.price > 0) {
+        // Redirect to payment page
+        window.location.href = `../payment/payment.html?courseId=${courseId}`;
+    } else {
+        // Free course - enroll directly
+        enrollFree(courseId);
+    }
+}
+
+function enrollFree(courseId) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+
+    user.courses.push(courseId);
+    localStorage.setItem('currentUser', JSON.stringify(user));
+
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    const userIndex = users.findIndex((u) => u.id === user.id);
+    if (userIndex !== -1) {
+        users[userIndex] = user;
+        localStorage.setItem('users', JSON.stringify(users));
+    }
+
+    alert('Successfully enrolled in this free course!');
+    location.reload();
+}
+
 // Export functions for use in other files
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { isAdmin, protectAdminRoute };
+    module.exports = { isAdmin, protectAdminRoute, handleEnrollment };
 }

@@ -22,10 +22,10 @@ function initDashboard() {
     populateCategoryFilters();
 }
 
-// ==================== NAVIGATION ====================
+// navigation menu handling
 document.querySelectorAll('.menu-item').forEach((item) => {
     item.addEventListener('click', function () {
-        // Remove active from all
+        //remove active from all
         document
             .querySelectorAll('.menu-item')
             .forEach((i) => i.classList.remove('active'));
@@ -33,14 +33,14 @@ document.querySelectorAll('.menu-item').forEach((item) => {
             .querySelectorAll('.content-section')
             .forEach((s) => s.classList.remove('active'));
 
-        // Add active to clicked
+        // ADDing active to clicked
         this.classList.add('active');
         const section = this.dataset.section;
         document.getElementById(section).classList.add('active');
     });
 });
 
-// ==================== STATISTICS ====================
+// statsicss
 function loadStatistics() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const users = JSON.parse(localStorage.getItem('users')) || [];
@@ -58,7 +58,7 @@ function loadStatistics() {
     document.getElementById('totalCategories').textContent = categories.length;
 }
 
-// ==================== RECENT COURSES ====================
+// this function loads recent courses on the dashboard
 function loadRecentCourses() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const recentCourses = courses.slice(0, 3);
@@ -83,7 +83,7 @@ function loadRecentCourses() {
     });
 }
 
-// ==================== COURSES CRUD ====================
+// courses management and crud operations
 function loadCoursesTable() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const search =
@@ -221,7 +221,7 @@ function saveCourse(event) {
         // Update existing
         const index = courses.findIndex((c) => c.id == courseId);
         courses[index] = { ...courses[index], ...courseData };
-        alert('✅ Course updated successfully!');
+        alert('Course updated successfully!');
     } else {
         // Add new
         const newCourse = {
@@ -230,7 +230,7 @@ function saveCourse(event) {
             content: [],
         };
         courses.push(newCourse);
-        alert('✅ Course added successfully!');
+        alert('Course added successfully!');
     }
 
     localStorage.setItem('courses', JSON.stringify(courses));
@@ -251,7 +251,7 @@ function deleteCourse(id) {
     courses = courses.filter((c) => c.id !== id);
     localStorage.setItem('courses', JSON.stringify(courses));
 
-    // Remove from students' enrollments
+    // Remove from students enrollments
     let users = JSON.parse(localStorage.getItem('users')) || [];
     users = users.map((user) => {
         if (user.courses) {
@@ -261,13 +261,13 @@ function deleteCourse(id) {
     });
     localStorage.setItem('users', JSON.stringify(users));
 
-    alert('✅ Course deleted successfully!');
+    alert('Course deleted successfully!');
     loadCoursesTable();
     loadRecentCourses();
     loadStatistics();
 }
 
-// ==================== CATEGORIES CRUD ====================
+// categories crud operations
 function loadCategoriesGrid() {
     const categories = JSON.parse(localStorage.getItem('categories')) || [];
     const grid = document.getElementById('categoriesGrid');
@@ -352,7 +352,7 @@ function saveCategory(event) {
         // Update existing
         const index = categories.findIndex((c) => c.id == categoryId);
         categories[index] = { ...categories[index], ...categoryData };
-        alert('✅ Category updated successfully!');
+        alert('Category updated successfully!');
     } else {
         // Add new
         const newCategory = {
@@ -360,7 +360,7 @@ function saveCategory(event) {
             ...categoryData,
         };
         categories.push(newCategory);
-        alert('✅ Category added successfully!');
+        alert('Category added successfully!');
     }
 
     localStorage.setItem('categories', JSON.stringify(categories));
@@ -386,13 +386,13 @@ function deleteCategory(id) {
     categories = categories.filter((c) => c.id !== id);
     localStorage.setItem('categories', JSON.stringify(categories));
 
-    alert('✅ Category deleted successfully!');
+    alert('Category deleted successfully!');
     loadCategoriesGrid();
     loadStatistics();
     populateCategoryFilters();
 }
 
-// ==================== STUDENTS MANAGEMENT ====================
+//managing students
 function loadStudentsTable() {
     const users = JSON.parse(localStorage.getItem('users')) || [];
     const students = users.filter((u) => u.role !== 'admin');
@@ -517,7 +517,7 @@ function loadEnrollmentsTable() {
     table.innerHTML = html;
 }
 
-// ==================== UTILITIES ====================
+// some helper functions [اوعى تيجي جنبهم يا مخ]
 function populateCategoryFilters() {
     const categories = JSON.parse(localStorage.getItem('categories')) || [];
     const select = document.getElementById('courseCategoryFilter');

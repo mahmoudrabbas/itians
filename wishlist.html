@@ -3,9 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Wishlist - Itians</title>
         <link rel="stylesheet" href="css/courses.css" />
         <link rel="stylesheet" href="css/wishlist.css" />
-        <title>Courses - Itians</title>
     </head>
     <body>
         <!-- NAVBAR -->
@@ -14,10 +14,10 @@
                 <a href="index.html" class="brand">Itians</a>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="#">Courses</a></li>
+                    <li><a href="courses.html">Courses</a></li>
                     <li><a href="about.html">About</a></li>
                     <li><a href="contact.html">Contact</a></li>
-                    <li id="wishlistNav" style="display: none">
+                    <li>
                         <a href="wishlist.html" class="wishlist-link">
                             ❤️ Wishlist
                             <span id="wishlistCount" class="wishlist-badge">
@@ -34,44 +34,20 @@
 
         <!-- PAGE HEADER -->
         <div class="page-header">
-            <h1>Explore Our Courses</h1>
-            <p>Learn from industry experts and advance your career</p>
+            <h1>My Wishlist</h1>
+            <p>Courses you're interested in</p>
         </div>
 
         <!-- MAIN CONTENT -->
         <div class="container">
-            <!-- FILTERS -->
-            <div class="filters">
-                <div class="filter-group">
-                    <label>Category:</label>
-                    <select id="categoryFilter">
-                        <option value="all">All Categories</option>
-                        <option value="Programming">Programming</option>
-                        <option value="Cybersecurity">Cybersecurity</option>
-                        <option value="Data Science">Data Science</option>
-                        <option value="Networking">Networking</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Price:</label>
-                    <select id="priceFilter">
-                        <option value="all">All</option>
-                        <option value="free">Free</option>
-                        <option value="paid">Paid</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Search:</label>
-                    <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="Search courses..."
-                    />
-                </div>
+            <div id="emptyWishlist" class="empty-state" style="display: none">
+                <div class="empty-icon">💔</div>
+                <h2>Your Wishlist is Empty</h2>
+                <p>Start adding courses you're interested in!</p>
+                <a href="courses.html" class="btn">Browse Courses</a>
             </div>
 
-            <!-- COURSES GRID -->
-            <div class="courses-grid" id="coursesGrid"></div>
+            <div id="wishlistGrid" class="courses-grid"></div>
         </div>
 
         <!-- COURSE DETAIL MODAL -->
@@ -94,9 +70,22 @@
                 </div>
                 <h3 style="margin-top: 1.5rem">Course Content</h3>
                 <ul id="modalContent" class="course-content-list"></ul>
-                <button class="btn enroll-btn" onclick="enrollCourse()">
-                    Enroll Now
-                </button>
+                <div style="display: flex; gap: 10px; margin-top: 1.5rem">
+                    <button
+                        class="btn enroll-btn"
+                        onclick="enrollCourse()"
+                        style="flex: 1"
+                    >
+                        Enroll Now
+                    </button>
+                    <button
+                        class="btn btn-remove"
+                        onclick="removeFromWishlistModal()"
+                        style="flex: 1; background: #e74c3c"
+                    >
+                        Remove from Wishlist
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -113,6 +102,6 @@
 
         <!-- SCRIPTS -->
         <script src="js/admin-setup.js"></script>
-        <script src="js/courses.js"></script>
+        <script src="js/wishlist.js"></script>
     </body>
 </html>
