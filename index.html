@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Itians - E-Learning Platform</title>
+        <title>ITians - E-Learning Platform</title>
         <link rel="stylesheet" href="/css/styles.css" />
         <style>
             .courses-grid {
@@ -104,10 +104,9 @@
         </style>
     </head>
     <body>
-        <!-- NAVBAR -->
         <nav class="navbar">
             <div class="container">
-                <a href="index.html" class="brand">Itians</a>
+                <a href="index.html" class="brand">ITians</a>
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="courses.html">Courses</a></li>
@@ -120,10 +119,9 @@
             </div>
         </nav>
 
-        <!-- HERO SECTION -->
         <section class="hero">
             <div class="container hero-content">
-                <h1>Upgrade Your Skills with Itians</h1>
+                <h1>Upgrade Your Skills with ITians</h1>
                 <p>
                     Learn programming, networking, cybersecurity, and more from
                     top instructors.
@@ -132,20 +130,18 @@
             </div>
         </section>
 
-        <!-- POPULAR COURSES -->
         <section class="courses-section">
             <div class="container">
                 <h2 class="section-title">Popular Courses</h2>
                 <div class="courses-grid" id="coursesGrid">
-                    <!-- Courses will be loaded here dynamically -->
+                    <!-- Courses will lode here dynamically -->
                 </div>
             </div>
         </section>
 
-        <!-- FOOTER -->
         <footer class="footer">
             <div class="container">
-                <p>© 2026 Itians - All Rights Reserved</p>
+                <p>© 2026 ITians - All Rights Reserved</p>
                 <div class="footer-links">
                     <a href="#">Privacy Policy</a>
                     <a href="#">Terms of Service</a>
@@ -158,9 +154,7 @@
             const navLinks = document.querySelector('.nav-links');
             const user = JSON.parse(localStorage.getItem('currentUser'));
 
-            // Handle navbar based on login status
             if (user) {
-                // Hide About and Contact links
                 const aboutLink = navLinks.querySelector(
                     'a[href="about.html"]'
                 );
@@ -172,16 +166,13 @@
                 if (contactLink)
                     contactLink.parentElement.style.display = 'none';
 
-                // Hide login button
                 loginBtn.style.display = 'none';
 
-                // Add Profile link
                 const profileLi = document.createElement('li');
                 profileLi.innerHTML =
                     '<a href="student/profile.html">Profile</a>';
                 navLinks.appendChild(profileLi);
 
-                // Add Logout button
                 const logoutLi = document.createElement('li');
                 logoutLi.innerHTML =
                     '<a href="#" class="btn" onclick="logout()">Logout</a>';
@@ -197,16 +188,20 @@
             }
 
             function displayCourses(courses) {
-                console.log(courses);
+                console.log('here 1');
+                // console.log(courses);
 
                 const grid = document.getElementById('coursesGrid');
                 grid.innerHTML = '';
 
                 courses.forEach((course) => {
+                    // console.log('here 2');
+
                     const card = document.createElement('div');
                     card.className = 'course-card';
                     card.onclick = () => handleCourseClick(course.id);
 
+                    // console.log('here 3');
                     const priceHTML =
                         course.price === 0
                             ? '<span class="course-price free">Free</span>'
@@ -226,50 +221,44 @@
                         </div>
                     `;
 
+                    // console.log('arrived here');
                     grid.appendChild(card);
                 });
             }
 
             displayCourses(JSON.parse(localStorage.getItem('courses')));
 
-            // Handle course click
             function handleCourseClick(courseId) {
                 const user = JSON.parse(localStorage.getItem('currentUser'));
 
                 if (!user) {
-                    // Not logged in - redirect to signup
-                    // alert('Please sign up or login to enroll in courses');
+                    alert('Please sign up or login to enroll in courses');
                     location.href = 'signup.html';
                     return;
                 }
 
-                // User is logged in - check if already enrolled
+                // if ur already enrolled in this course
                 if (user.courses.includes(courseId)) {
-                    // Already enrolled - go to course content
                     location.href = `/course/course-content.html?id=${courseId}`;
                     return;
                 }
 
-                // Not enrolled yet - go to payment page
                 const courses = JSON.parse(localStorage.getItem('courses'));
                 const course = courses.find((c) => c.id === courseId);
 
                 if (course.price === 0) {
-                    // Free course - enroll directly
                     enrollInCourse(courseId);
                 } else {
-                    // Paid course - go to payment
                     location.href = `payment.html?id=${courseId}`;
                 }
             }
 
-            // Enroll in free course
+            // Enroll in course
             function enrollInCourse(courseId) {
                 const user = JSON.parse(localStorage.getItem('currentUser'));
                 const courses = JSON.parse(localStorage.getItem('courses'));
                 const course = courses.find((c) => c.id === courseId);
 
-                // Add course to user
                 user.courses.push(courseId);
                 localStorage.setItem('currentUser', JSON.stringify(user));
 
@@ -281,12 +270,9 @@
                     localStorage.setItem('users', JSON.stringify(users));
                 }
 
-                alert(`Successfully enrolled in ${course.title}!`);
+                alert(`Ssuccessfully enrolled in ${course.title}!`);
                 location.href = `/course/course-content.html?id=${courseId}`;
             }
-
-            // Load courses on page load
-            // loadCourses();
         </script>
         <script src="js/courses.js"></script>
     </body>

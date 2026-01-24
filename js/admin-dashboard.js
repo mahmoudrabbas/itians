@@ -1,4 +1,5 @@
-let courses = [
+// Read courses from localStorage
+let courses = JSON.parse(localStorage.getItem('courses')) || [
     {
         id: 1,
         title: 'Full Stack Web Development',
@@ -9,6 +10,7 @@ let courses = [
             'Master HTML, CSS, JavaScript, React, Node.js and MongoDB.',
         price: 499,
         duration: '12 weeks',
+        content: [],
     },
     {
         id: 2,
@@ -19,6 +21,7 @@ let courses = [
         description: 'Learn ethical hacking and penetration testing.',
         price: 599,
         duration: '10 weeks',
+        content: [],
     },
     {
         id: 3,
@@ -29,10 +32,11 @@ let courses = [
         description: 'Learn Python programming and data analysis.',
         price: 0,
         duration: '8 weeks',
+        content: [],
     },
 ];
 
-let categories = [
+let categories = JSON.parse(localStorage.getItem('categories')) || [
     {
         id: 1,
         name: 'Programming',
@@ -59,20 +63,28 @@ let categories = [
     },
 ];
 
-let students = [
+let students = JSON.parse(localStorage.getItem('users')) || [
     {
         id: 1,
-        name: 'Mohamed Ali',
-        email: 'mohamed@example.com',
+        name: 'Mahmoud Abbas',
+        email: 'mahmoud@gmail.com',
+        password: '_Mahmoud123',
         courses: [1, 2],
     },
     {
         id: 2,
-        name: 'Fatma Ahmed',
-        email: 'fatma@example.com',
-        courses: [3],
+        name: 'Mohk ',
+        email: '_mokh@example.com',
+        password: '_Mokh123',
+        courses: [1],
     },
 ];
+
+function saveToLocalStorage() {
+    localStorage.setItem('courses', JSON.stringify(courses));
+    localStorage.setItem('categories', JSON.stringify(categories));
+    localStorage.setItem('users', JSON.stringify(students));
+}
 
 let editingCourseId = null;
 let editingCategoryId = null;
@@ -229,6 +241,7 @@ function saveCourse(e) {
         courses.push({ ...data, id: Date.now() });
     }
 
+    saveToLocalStorage();
     closeCourseModal();
     renderCourses();
     renderOverview();
@@ -283,6 +296,7 @@ function renderContentItems() {
 function deleteCourse(id) {
     if (confirm('Delete this course?')) {
         courses = courses.filter((c) => c.id !== id);
+        saveToLocalStorage();
         renderCourses();
         renderOverview();
     }
@@ -338,6 +352,7 @@ function saveCategory(e) {
         categories.push({ ...data, id: Date.now() });
     }
 
+    saveToLocalStorage();
     closeCategoryModal();
     renderCategories();
     renderOverview();
@@ -346,6 +361,7 @@ function saveCategory(e) {
 function deleteCategory(id) {
     if (confirm('Delete this category?')) {
         categories = categories.filter((c) => c.id !== id);
+        saveToLocalStorage();
         renderCategories();
         renderOverview();
     }
@@ -380,6 +396,5 @@ renderOverview();
 
 function logout() {
     localStorage.removeItem('currentUser');
-    // Redirect to login page
-    window.location.href = '../login.html';
+    window.location.href = '../index.html';
 }

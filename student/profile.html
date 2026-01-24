@@ -5,13 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="../css/profile.css" />
         <link rel="stylesheet" href="../css/styles.css" />
-        <title>Profile - Itians</title>
+        <title>Profile - ITians</title>
     </head>
     <body>
-        <!-- NAVBAR -->
         <nav class="navbar">
             <div class="container">
-                <a href="../index.html" class="brand">Itians</a>
+                <a href="../index.html" class="brand">ITians</a>
                 <ul class="nav-links">
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../courses.html">Courses</a></li>
@@ -23,16 +22,13 @@
             </div>
         </nav>
 
-        <!-- PAGE HEADER -->
         <div class="page-header">
             <h1>My Profile</h1>
             <p>Manage your account and track your learning progress</p>
         </div>
 
-        <!-- PROFILE CONTENT -->
         <div class="profile-container">
             <div class="profile-grid">
-                <!-- SIDEBAR -->
                 <div class="profile-sidebar">
                     <div class="profile-avatar" id="avatarInitial"></div>
                     <div class="profile-name" id="profileName"></div>
@@ -52,7 +48,6 @@
                     </div>
                 </div>
 
-                <!-- MAIN CONTENT -->
                 <div class="profile-main">
                     <h2 class="section-title">Account Information</h2>
 
@@ -80,7 +75,6 @@
                         Edit Profile
                     </button>
 
-                    <!-- ENROLLED COURSES -->
                     <div class="courses-enrolled">
                         <h2 class="section-title">My Enrolled Courses</h2>
                         <div id="enrolledCoursesList"></div>
@@ -89,7 +83,6 @@
             </div>
         </div>
 
-        <!-- EDIT PROFILE MODAL -->
         <div id="editModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeEditModal()">&times;</span>
@@ -108,10 +101,9 @@
             </div>
         </div>
 
-        <!-- FOOTER -->
         <footer class="footer">
             <div class="container">
-                <p>© 2026 Itians - All Rights Reserved</p>
+                <p>© 2026 ITians - All Rights Reserved</p>
                 <div class="footer-links">
                     <a href="#">Privacy Policy</a>
                     <a href="#">Terms of Service</a>
@@ -120,23 +112,19 @@
         </footer>
 
         <script>
-            // Check if user is logged in
             let currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
             if (!currentUser) {
-                // alert('Please login first!');
+                alert('Please login first!');
                 window.location.href = '../login.html';
             }
 
-            // Display user information
             function displayProfile() {
                 const user = JSON.parse(localStorage.getItem('currentUser'));
 
-                // Avatar initial
                 const initial = user.name.charAt(0).toUpperCase();
                 document.getElementById('avatarInitial').textContent = initial;
 
-                // Profile info
                 document.getElementById('profileName').textContent = user.name;
                 document.getElementById('profileEmail').textContent =
                     user.email;
@@ -149,15 +137,12 @@
                 document.getElementById('roleDisplay').textContent =
                     user.role.charAt(0).toUpperCase() + user.role.slice(1);
 
-                // Courses count
                 document.getElementById('coursesCount').textContent =
                     user.courses.length;
 
-                // Display enrolled courses
                 displayEnrolledCourses();
             }
 
-            // Display enrolled courses
             function displayEnrolledCourses() {
                 const user = JSON.parse(localStorage.getItem('currentUser'));
                 const courses = JSON.parse(localStorage.getItem('courses'));
@@ -195,14 +180,12 @@
                 });
             }
 
-            // Go to course
             function goToCourse(courseId) {
                 console.log('go to course func');
 
                 window.location.href = `/course/course-content.html?id=${courseId}`;
             }
 
-            // Open edit modal
             function openEditModal() {
                 const user = JSON.parse(localStorage.getItem('currentUser'));
                 document.getElementById('editName').value = user.name;
@@ -210,12 +193,10 @@
                 document.getElementById('editModal').style.display = 'block';
             }
 
-            // Close edit modal
             function closeEditModal() {
                 document.getElementById('editModal').style.display = 'none';
             }
 
-            // Save profile changes
             function saveProfile(event) {
                 event.preventDefault();
 
@@ -228,11 +209,12 @@
                 // Validate email format
                 const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
                 if (!emailRegex.test(newEmail)) {
-                    // alert('Please enter a valid Gmail address');
+                    alert(
+                        'Please enter a valid email address .. Ex: someone@gmail.com'
+                    );
                     return;
                 }
 
-                // Check if email is taken by another user
                 const users = JSON.parse(localStorage.getItem('users'));
                 // console.log(users);
 
@@ -241,11 +223,12 @@
                 );
 
                 if (emailExists) {
-                    // alert('This email is already taken by another user');
+                    alert(
+                        'Please enter a valid email address .. Ex: someone@gmail.com'
+                    );
                     return;
                 }
 
-                // Update current user
                 currentUser.name = newName;
                 currentUser.email = newEmail;
                 localStorage.setItem(
@@ -253,7 +236,6 @@
                     JSON.stringify(currentUser)
                 );
 
-                // Update in users array
                 const userIndex = users.findIndex(
                     (u) => u.id === currentUser.id
                 );
@@ -264,18 +246,15 @@
                     localStorage.setItem('users', JSON.stringify(users));
                 }
 
-                // alert('Profile updated successfully!');
                 closeEditModal();
                 displayProfile();
             }
 
-            // Logout function
             function logout() {
                 localStorage.removeItem('currentUser');
                 window.location.href = '../login.html';
             }
 
-            // Close modal when clicking outside
             window.onclick = function (event) {
                 const modal = document.getElementById('editModal');
                 if (event.target == modal) {
@@ -283,7 +262,6 @@
                 }
             };
 
-            // Initialize profile on page load
             displayProfile();
         </script>
     </body>

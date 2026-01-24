@@ -1,28 +1,39 @@
-// Initialize Admin User
 function initializeAdmin() {
     let users = JSON.parse(localStorage.getItem('users')) || [];
 
-    // Check if admin already exists
     const adminExists = users.find((u) => u.email === 'admin@gmail.com');
 
     if (!adminExists) {
-        const admin = {
-            id: 'admin_' + Date.now(),
-            name: 'Admin',
-            email: 'admin@gmail.com',
+        const admin1 = {
+            id: 'admin_1' + Date.now(),
+            name: 'Admin1',
+            email: 'admin1@gmail.com',
             password: 'admin123',
             role: 'admin',
+            courses: [],
+            wishlists: [],
+            createdAt: new Date().toISOString(),
+        };
+
+        const admin2 = {
+            id: 'admin_2' + Date.now(),
+            name: 'Admin2',
+            email: 'admin2@gmail.com',
+            password: 'admin123',
+            role: 'admin',
+            wishlists: [],
             courses: [],
             createdAt: new Date().toISOString(),
         };
 
-        users.push(admin);
+        users.push(admin1);
+        users.push(admin2);
+
         localStorage.setItem('users', JSON.stringify(users));
         // console.log('Admin user created successfully');
     }
 }
 
-// Initialize Categories
 function initializeCategories() {
     const categories = [
         {
@@ -53,29 +64,24 @@ function initializeCategories() {
 
     if (!localStorage.getItem('categories')) {
         localStorage.setItem('categories', JSON.stringify(categories));
-        // console.log('Categories initialized');
     }
 }
 
-// Check if user is admin
 function isAdmin() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     return user && user.role === 'admin';
 }
 
-// Protect admin routes
 function protectAdminRoute() {
     if (!isAdmin()) {
         alert('Access Denied: Admin only!');
-        window.location.href = '../login.html';
+        window.location.href = '../index.html';
     }
 }
 
-// Initialize on page load
 initializeAdmin();
 initializeCategories();
 
-// Handle course enrollment with payment check
 function handleEnrollment(courseId) {
     const user = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -93,18 +99,14 @@ function handleEnrollment(courseId) {
         return;
     }
 
-    // Check if already enrolled
     if (user.courses.includes(courseId)) {
         alert('You are already enrolled in this course!');
         return;
     }
 
-    // Check if course is paid
     if (course.price > 0) {
-        // Redirect to payment page
         window.location.href = `../payment/payment.html?courseId=${courseId}`;
     } else {
-        // Free course - enroll directly
         enrollFree(courseId);
     }
 }

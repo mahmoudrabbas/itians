@@ -230,25 +230,21 @@ const courses = [
     },
 ];
 
-// Initialize courses in localStorage if not exists
 if (!localStorage.getItem('courses')) {
     localStorage.setItem('courses', JSON.stringify(courses));
 }
 
-// Get courses from localStorage
 let allCourses = JSON.parse(localStorage.getItem('courses'));
 
-// Get current user
 const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
 
-// Initialize wishlist if user is logged in
+// initialize wishlist in case if user is logged in
 if (loggedInUser && !loggedInUser.wishlist) {
     loggedInUser.wishlist = [];
     localStorage.setItem('currentUser', JSON.stringify(loggedInUser));
     updateUserInStorage();
 }
 
-// Display courses
 function displayCourses(coursesToDisplay) {
     const grid = document.getElementById('coursesGrid');
     grid.innerHTML = '';
@@ -262,7 +258,6 @@ function displayCourses(coursesToDisplay) {
                 ? '<span class="course-price free">Free</span>'
                 : `<span class="course-price">${course.price}</span>`;
 
-        // Check if course is in wishlist
         const isInWishlist =
             loggedInUser && loggedInUser.wishlist.includes(course.id);
         const wishlistIcon = loggedInUser
@@ -294,7 +289,6 @@ function displayCourses(coursesToDisplay) {
     updateWishlistCount();
 }
 
-// Show course details in modal
 let selectedCourseId = null;
 
 function showCourseDetails(courseId) {
@@ -326,7 +320,6 @@ function showCourseDetails(courseId) {
     document.getElementById('courseModal').style.display = 'block';
 }
 
-// Enroll in course - NOW WITH PAYMENT CHECK
 function enrollCourse() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -337,26 +330,21 @@ function enrollCourse() {
 
     const course = allCourses.find((c) => c.id === selectedCourseId);
 
-    // Check if already enrolled
     if (user.courses.includes(selectedCourseId)) {
         alert('You are already enrolled in this course!');
         return;
     }
 
-    // Close modal
     document.getElementById('courseModal').style.display = 'none';
 
-    // Check if course is paid or free
     if (course.price > 0) {
-        // Redirect to payment page
         window.location.href = `payment.html?courseId=${selectedCourseId}`;
     } else {
-        // Free course - enroll directly
         enrollFreeCourse(selectedCourseId);
     }
 }
 
-// Enroll in free course directly
+//enroll in free course directly
 function enrollFreeCourse(courseId) {
     const user = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -373,7 +361,7 @@ function enrollFreeCourse(courseId) {
     alert('Successfully enrolled in this free course!');
 }
 
-// Filter functionality
+// filter courses by gategory and prices
 document
     .getElementById('categoryFilter')
     .addEventListener('change', filterCourses);
@@ -411,7 +399,6 @@ function filterCourses() {
     displayCourses(filtered);
 }
 
-// Close modal
 document.querySelector('.close').onclick = function () {
     document.getElementById('courseModal').style.display = 'none';
 };
@@ -422,7 +409,6 @@ window.onclick = function (event) {
     }
 };
 
-// Handle navbar for logged in users
 const loginBtn = document.getElementById('loginbtn');
 const navLinks = document.querySelector('.nav-links');
 const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -436,7 +422,6 @@ if (user) {
 
     loginBtn.style.display = 'none';
 
-    // Show wishlist
     document.getElementById('wishlistNav').style.display = 'block';
 
     const profileLi = document.createElement('li');
@@ -454,7 +439,6 @@ function logout() {
     location.href = '../login.html';
 }
 
-// Toggle wishlist
 function toggleWishlist(courseId, event) {
     event.stopPropagation();
 
@@ -467,11 +451,9 @@ function toggleWishlist(courseId, event) {
     const wishlistIndex = loggedInUser.wishlist.indexOf(courseId);
 
     if (wishlistIndex > -1) {
-        // Remove from wishlist
         loggedInUser.wishlist.splice(wishlistIndex, 1);
         showToast('Removed from wishlist', 'error');
     } else {
-        // Add to wishlist
         loggedInUser.wishlist.push(courseId);
         showToast('Added to wishlist', 'success');
     }
@@ -479,11 +461,9 @@ function toggleWishlist(courseId, event) {
     localStorage.setItem('currentUser', JSON.stringify(loggedInUser));
     updateUserInStorage();
 
-    // Refresh the display
     filterCourses();
 }
 
-// Update user in users array
 function updateUserInStorage() {
     let users = JSON.parse(localStorage.getItem('users')) || [];
     const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
@@ -493,7 +473,6 @@ function updateUserInStorage() {
     }
 }
 
-// Update wishlist count
 function updateWishlistCount() {
     if (!loggedInUser) return;
 
@@ -510,7 +489,6 @@ function updateWishlistCount() {
     }
 }
 
-// Show toast notification
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -526,8 +504,7 @@ function showToast(message, type = 'success') {
 
     setTimeout(() => {
         toast.remove();
-    }, 3000);
+    }, 2000);
 }
 
-// Display all courses on page load
 displayCourses(allCourses);

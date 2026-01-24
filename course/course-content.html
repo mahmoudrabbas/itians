@@ -5,14 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/css/course-content.css" />
         <link rel="stylesheet" href="/css/styles.css" />
-        <title>Course Content - Itians</title>
+        <title>Course Content - ITians</title>
         <style></style>
     </head>
     <body>
-        <!-- NAVBAR -->
         <nav class="navbar">
             <div class="container">
-                <a href="../index.html" class="brand">Itians</a>
+                <a href="../index.html" class="brand">ITians</a>
                 <ul class="nav-links">
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="../courses.html">Courses</a></li>
@@ -24,7 +23,6 @@
             </div>
         </nav>
 
-        <!-- COURSE HEADER -->
         <div class="course-header">
             <div class="container">
                 <h1 id="courseTitle">Loading...</h1>
@@ -45,7 +43,6 @@
             </div>
         </div>
 
-        <!-- PROGRESS SECTION -->
         <div class="container">
             <div class="progress-section">
                 <h3>Your Progress</h3>
@@ -55,20 +52,15 @@
             </div>
         </div>
 
-        <!-- MAIN CONTENT -->
         <div class="container">
             <div class="course-container">
-                <!-- SIDEBAR -->
                 <div class="course-sidebar">
                     <div class="sidebar-header">
                         <h3>Course Content</h3>
                     </div>
-                    <ul class="content-list" id="contentList">
-                        <!-- Content items will be loaded here -->
-                    </ul>
+                    <ul class="content-list" id="contentList"></ul>
                 </div>
 
-                <!-- MAIN AREA -->
                 <div class="course-main" id="mainContent">
                     <div class="empty-state">
                         <h2>Welcome to the Course!</h2>
@@ -80,10 +72,9 @@
             </div>
         </div>
 
-        <!-- FOOTER -->
         <footer class="footer">
             <div class="container">
-                <p>© 2026 Itians - All Rights Reserved</p>
+                <p>© 2026 ITians - All Rights Reserved</p>
                 <div class="footer-links">
                     <a href="#">Privacy Policy</a>
                     <a href="#">Terms of Service</a>
@@ -92,25 +83,21 @@
         </footer>
 
         <script>
-            // Get course ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             const courseId = parseInt(urlParams.get('id'));
             console.log(courseId);
 
-            // Check if user is logged in
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             if (!currentUser) {
-                // alert('Please login first!');
+                alert('Please login first!');
                 window.location.href = '../login.html';
             }
 
-            // check if user is enrolled in this course
             if (!currentUser.courses.includes(courseId)) {
                 alert('You are not enrolled in this course!');
                 window.location.href = '../courses.html';
             }
 
-            // Get course data
             const courses = JSON.parse(localStorage.getItem('courses'));
 
             const course = courses.find((c) => c.id === courseId);
@@ -121,7 +108,6 @@
                 window.location.href = '../courses.html';
             }
 
-            // Track current content index
             let currentContentIndex = 0;
 
             // Initialize user progress
@@ -132,7 +118,6 @@
                 lastAccessed: null,
             };
 
-            // Display course information
             function displayCourseInfo() {
                 document.getElementById('courseTitle').textContent =
                     course.title;
@@ -144,7 +129,6 @@
                     course.duration;
             }
 
-            // Display content list
             function displayContentList() {
                 // console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDdde');
 
@@ -190,7 +174,6 @@
                 updateProgress();
             }
 
-            // Load content
             function loadContent(index) {
                 // console.log('dds');
 
@@ -261,7 +244,6 @@
                 window.scrollTo(0, 0);
             }
 
-            // Mark content as completed
             function markAsCompleted() {
                 if (
                     !userProgress.completedItems.includes(currentContentIndex)
@@ -272,7 +254,6 @@
                 }
             }
 
-            // Navigation functions
             function previousContent() {
                 if (currentContentIndex > 0) {
                     loadContent(currentContentIndex - 1);
@@ -285,7 +266,6 @@
                 }
             }
 
-            // Update progress bar
             function updateProgress() {
                 const total = course.content.length;
                 const completed = userProgress.completedItems.length;
@@ -297,7 +277,6 @@
                 progressFill.textContent = percentage + '%';
             }
 
-            // Save progress to localStorage
             function saveProgress() {
                 localStorage.setItem(
                     `progress_${currentUser.id}_${courseId}`,
@@ -305,17 +284,14 @@
                 );
             }
 
-            // Logout function
             function logout() {
                 localStorage.removeItem('currentUser');
                 window.location.href = '../login.html';
             }
 
-            // Initialize page
             displayCourseInfo();
             displayContentList();
 
-            // Load last accessed content or first content
             if (userProgress.lastAccessed !== null) {
                 loadContent(userProgress.lastAccessed);
             } else if (course.content.length > 0) {

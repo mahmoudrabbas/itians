@@ -5,28 +5,23 @@ var confirmpassword;
 
 let users = JSON.parse(localStorage.getItem('users')) || [];
 
-// Check if user already logged in - Redirect to home
 function checkIfLoggedIn() {
     let currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
-        // Check if currentUser is valid JSON
         try {
             const user = JSON.parse(currentUser);
 
-            // Redirect based on role
             if (user.role === 'admin') {
                 location.href = '../admin/dashboard.html';
             } else {
                 location.href = '../index.html';
             }
         } catch (e) {
-            // Invalid currentUser, remove it
             localStorage.removeItem('currentUser');
         }
     }
 }
 
-// Call this function when page loads
 window.onload = function () {
     checkIfLoggedIn();
 };
@@ -45,15 +40,12 @@ function login(event) {
     email = document.getElementById('email').value.trim();
     password = document.getElementById('password').value;
 
-    // Validate email format only
     if (!validateemail()) {
         return;
     }
 
-    // Reload users from localStorage
     users = JSON.parse(localStorage.getItem('users')) || [];
 
-    // Find user by email
     let foundUser = users.find((u) => u.email === email);
 
     if (!foundUser) {
@@ -61,45 +53,39 @@ function login(event) {
         return;
     }
 
-    // Check password
     if (password !== foundUser.password) {
         document.getElementById('passmsg').innerHTML = 'Wrong password';
         return;
     }
 
-    // Clear error messages
     document.getElementById('emailmsg').innerHTML = '';
     document.getElementById('passmsg').innerHTML = '';
 
-    // Success message
+    // login success message
     document.getElementById('emailmsg').innerHTML = 'Login successfully';
     document.getElementById('emailmsg').style.color = 'green';
 
-    // Save currentUser in localStorage
     localStorage.setItem('currentUser', JSON.stringify(foundUser));
 
-    // Redirect based on user role
     setTimeout(() => {
         if (foundUser.role === 'admin') {
             location.href = '../admin/dashboard.html';
         } else {
             location.href = '../index.html';
         }
-    }, 800);
+    }, 500);
 }
 
-function loginpassword() {
-    // This function is no longer needed for login
-    // Kept for backward compatibility
-    let passwordregex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    if (!passwordregex.test(password)) {
-        document.getElementById('passmsg').innerHTML =
-            '*Password must be 8+ characters include uppercase lowercase and a number';
-        return false;
-    }
-    document.getElementById('passmsg').innerHTML = '';
-    return true;
-}
+// function loginpassword() {
+//     let passwordregex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+//     if (!passwordregex.test(password)) {
+//         document.getElementById('passmsg').innerHTML =
+//             '*Password must be 8+ characters include uppercase lowercase and a number';
+//         return false;
+//     }
+//     document.getElementById('passmsg').innerHTML = '';
+//     return true;
+// }
 
 // signup validation functions
 function validatename() {
@@ -164,14 +150,12 @@ function signup(event) {
     }
 
     if (validatename() && validateemail() && validatepassword()) {
-        // Check if Email already exists
         if (users.some((u) => u.email === email)) {
             document.getElementById('emailmsg').innerHTML =
                 'Email is already exist';
             return;
         }
 
-        // Create NEW USER with role = student
         let newUser = {
             id: generateId(),
             name: name,
@@ -181,16 +165,12 @@ function signup(event) {
             courses: [],
         };
 
-        // Add user to users array
         users.push(newUser);
 
-        // Save users array to localStorage
         localStorage.setItem('users', JSON.stringify(users));
 
-        // Save new user as currentUser in localStorage
         localStorage.setItem('currentUser', JSON.stringify(newUser));
 
-        // Redirect to home page (students always go to index.html)
         setTimeout(() => {
             location.href = '../index.html';
         }, 500);
