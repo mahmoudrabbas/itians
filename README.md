@@ -1,4 +1,4 @@
-# 🎓 E-Learning System – JavaScript Project
+# 🎓 ITians – JavaScript Project
 
 An **E-Learning System** built using **JavaScript**, with support for **Local Storage** or **Firebase Realtime Database**.  
 The project includes a full authentication system for both **Admins** and **Students**, with separate permissions and features.
@@ -45,7 +45,6 @@ Admins can:
 - 🔧 Perform full **CRUD operations** on Courses
 - 🔧 Perform full **CRUD operations** on Categories
 - 👨‍🎓 View and manage student progress
-- 👍/👎 Approve or reject course enrollment requests (if required)
 
 ---
 
@@ -74,13 +73,6 @@ You can choose one of the following:
 - Simple and easy to implement
 - Suitable for training projects
 
-### 2. **Firebase Realtime Database**
-
-- Real-time data syncing
-- More professional and scalable
-
----
-
 ## 🎨 User Interface Requirements
 
 - **No premade themes allowed**
@@ -102,4 +94,3 @@ You can choose one of the following:
 
 - **Mahmoud Ramadan Abbas**
 - **Mokhtar Mohamed Mokhtar**
-- **Wafaey Khaled Mohamed**
