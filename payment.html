@@ -1,69 +1,232 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Payment</title>
-  <link rel="stylesheet" href="/css/payment.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Payment - Itians</title>
+        <link rel="stylesheet" href="css/payment.css" />
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="brand">Itians</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="#" id="userNameNav"></a></li>
+                </ul>
+            </div>
+        </nav>
 
-  <div class="payment-container">
+        <!-- PAYMENT CONTAINER -->
+        <div class="payment-wrapper">
+            <div class="container">
+                <div class="payment-grid">
+                    <!-- COURSE SUMMARY -->
+                    <div class="course-summary-card">
+                        <h2>Course Summary</h2>
+                        <div class="course-info">
+                            <img
+                                id="courseImage"
+                                src=""
+                                alt="Course"
+                                class="summary-image"
+                            />
+                            <div class="summary-details">
+                                <h3 id="courseTitle"></h3>
+                                <p class="instructor">
+                                    By
+                                    <span id="courseInstructor"></span>
+                                </p>
+                                <p class="category">
+                                    <span
+                                        id="courseCategory"
+                                        class="course-category"
+                                    ></span>
+                                </p>
+                                <p class="duration">
+                                    Duration:
+                                    <span id="courseDuration"></span>
+                                </p>
+                            </div>
+                        </div>
 
-    <!-- Left: Order Summary -->
-    <div class="order-summary">
-      <h2>Order Summary</h2>
+                        <div class="price-breakdown">
+                            <div class="price-row">
+                                <span>Course Price:</span>
+                                <span id="coursePrice" class="price-value">
+                                    $0
+                                </span>
+                            </div>
+                            <div class="price-row">
+                                <span>Tax (0%):</span>
+                                <span class="price-value">$0.00</span>
+                            </div>
+                            <hr />
+                            <div class="price-row total">
+                                <span>Total:</span>
+                                <span id="totalPrice" class="price-value">
+                                    $0
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
-      <div class="item">
-        <span>Product Name</span>
-        <span>$50</span>
-      </div>
+                    <!-- PAYMENT METHOD -->
+                    <div class="payment-method-card">
+                        <h2>Select Payment Method</h2>
 
-      <div class="item">
-        <span>Tax</span>
-        <span>$5</span>
-      </div>
+                        <div class="payment-methods">
+                            <!-- PayPal -->
+                            <div class="payment-option" data-method="paypal">
+                                <input
+                                    type="radio"
+                                    name="payment"
+                                    id="paypal"
+                                    value="paypal"
+                                    checked
+                                />
+                                <label for="paypal">
+                                    <div class="method-icon paypal-icon">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            width="40"
+                                            height="40"
+                                        >
+                                            <path
+                                                fill="#003087"
+                                                d="M20.905 9.5c.21-1.337-.013-2.246-.67-3.041C19.479 5.587 18.024 5 16.236 5H9.78c-.458 0-.85.333-.922.788l-2.714 17.2c-.054.34.195.637.535.637h3.9l.98-6.213-.03.197c.071-.455.458-.788.917-.788h1.91c3.755 0 6.694-1.526 7.551-5.942.025-.128.046-.252.066-.372.252-1.61.011-2.706-.068-3.008z"
+                                            />
+                                            <path
+                                                fill="#0070E0"
+                                                d="M9.358 9.5c.053-.345.3-.637.65-.726.09-.023.186-.035.285-.035h7.396c.875 0 1.69.057 2.433.178.221.036.435.078.643.127.206.048.407.103.6.164.097.03.192.062.285.095.743.265 1.358.65 1.828 1.163.21-1.337-.013-2.246-.67-3.041C21.979 5.587 20.524 5 18.736 5h-6.456c-.458 0-.85.333-.922.788l-2.714 17.2c-.054.34.195.637.535.637h3.9l.98-6.213.3-1.912z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="method-info">
+                                        <strong>PayPal</strong>
+                                        <small>
+                                            Pay with your PayPal account
+                                        </small>
+                                    </div>
+                                </label>
+                            </div>
 
-      <hr />
+                            <!-- Stripe (Credit Card) -->
+                            <div class="payment-option" data-method="stripe">
+                                <input
+                                    type="radio"
+                                    name="payment"
+                                    id="stripe"
+                                    value="stripe"
+                                />
+                                <label for="stripe">
+                                    <div class="method-icon stripe-icon">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            width="40"
+                                            height="40"
+                                        >
+                                            <path
+                                                fill="#635BFF"
+                                                d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.594-7.305h.003z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <div class="method-info">
+                                        <strong>Credit/Debit Card</strong>
+                                        <small>Pay securely with Stripe</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
 
-      <div class="total">
-        <span>Total</span>
-        <span>$55</span>
-      </div>
-    </div>
+                        <!-- PAYMENT FORM (for Stripe) -->
+                        <div
+                            id="stripeForm"
+                            class="payment-form"
+                            style="display: none"
+                        >
+                            <h3>Card Information</h3>
+                            <div class="form-group">
+                                <label>Card Number</label>
+                                <input
+                                    type="text"
+                                    id="cardNumber"
+                                    placeholder="1234 5678 9012 3456"
+                                    maxlength="19"
+                                />
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Expiry Date</label>
+                                    <input
+                                        type="text"
+                                        id="expiryDate"
+                                        placeholder="MM/YY"
+                                        maxlength="5"
+                                    />
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input
+                                        type="text"
+                                        id="cvv"
+                                        placeholder="123"
+                                        maxlength="3"
+                                    />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Cardholder Name</label>
+                                <input
+                                    type="text"
+                                    id="cardholderName"
+                                    placeholder="John Doe"
+                                />
+                            </div>
+                        </div>
 
-    <!-- Right: Payment Form -->
-    <div class="payment-form">
-      <h2>Payment Details</h2>
+                        <!-- PAYMENT BUTTON -->
+                        <button class="btn btn-pay" onclick="processPayment()">
+                            <span id="payBtnText">Complete Payment</span>
+                        </button>
 
-      <form>
-        <div class="form-group">
-          <label>Cardholder Name</label>
-          <input type="text" placeholder="John Doe">
+                        <div class="security-badge">
+                            <span>🔒</span>
+                            <small>
+                                Your payment information is secure and encrypted
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-          <label>Card Number</label>
-          <input type="text" placeholder="1234 5678 9012 3456">
+        <!-- LOADING MODAL -->
+        <div id="loadingModal" class="modal">
+            <div class="modal-content loading-content">
+                <div class="loader"></div>
+                <h3>Processing Payment...</h3>
+                <p>Please wait while we process your payment securely.</p>
+            </div>
         </div>
 
-        <div class="row">
-          <div class="form-group">
-            <label>Expiry Date</label>
-            <input type="text" placeholder="MM/YY">
-          </div>
-
-          <div class="form-group">
-            <label>CVV</label>
-            <input type="password" placeholder="123">
-          </div>
+        <!-- SUCCESS MODAL -->
+        <div id="successModal" class="modal">
+            <div class="modal-content success-content">
+                <div class="success-icon">✓</div>
+                <h2>Payment Successful!</h2>
+                <p>You have successfully enrolled in the course.</p>
+                <button class="btn" onclick="goToCourse()">
+                    Go to My Courses
+                </button>
+            </div>
         </div>
 
-        <button type="submit">Pay Now</button>
-      </form>
-    </div>
-
-  </div>
-
-</body>
+        <!-- SCRIPTS -->
+        <script src="js/admin-setup.js"></script>
+        <script src="js/payment.js"></script>
+    </body>
 </html>

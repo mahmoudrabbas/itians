@@ -238,6 +238,16 @@ if (!localStorage.getItem('courses')) {
 // Get courses from localStorage
 let allCourses = JSON.parse(localStorage.getItem('courses'));
 
+// Get current user
+const loggedInUser = JSON.parse(localStorage.getItem('currentUser'));
+
+// Initialize wishlist if user is logged in
+if (loggedInUser && !loggedInUser.wishlist) {
+    loggedInUser.wishlist = [];
+    localStorage.setItem('currentUser', JSON.stringify(loggedInUser));
+    updateUserInStorage();
+}
+
 // Display courses
 function displayCourses(coursesToDisplay) {
     const grid = document.getElementById('coursesGrid');
@@ -246,16 +256,27 @@ function displayCourses(coursesToDisplay) {
     coursesToDisplay.forEach((course) => {
         const card = document.createElement('div');
         card.className = 'course-card';
-        card.onclick = () => showCourseDetails(course.id);
 
         const priceHTML =
             course.price === 0
                 ? '<span class="course-price free">Free</span>'
-                : `<span class="course-price">$${course.price}</span>`;
+                : `<span class="course-price">${course.price}</span>`;
+
+        // Check if course is in wishlist
+        const isInWishlist =
+            loggedInUser && loggedInUser.wishlist.includes(course.id);
+        const wishlistIcon = loggedInUser
+            ? `
+            <div class="wishlist-icon ${isInWishlist ? 'active' : ''}" onclick="toggleWishlist(${course.id}, event)">
+                ${isInWishlist ? '❤️' : '🤍'}
+            </div>
+        `
+            : '';
 
         card.innerHTML = `
-            <img src="${course.image}" alt="${course.title}" class="course-image">
-            <div class="course-body">
+            ${wishlistIcon}
+            <img src="${course.image}" alt="${course.title}" class="course-image" onclick="showCourseDetails(${course.id})">
+            <div class="course-body" onclick="showCourseDetails(${course.id})">
                 <span class="course-category">${course.category}</span>
                 <h3 class="course-title">${course.title}</h3>
                 <p class="course-instructor">By ${course.instructor}</p>
@@ -269,6 +290,8 @@ function displayCourses(coursesToDisplay) {
 
         grid.appendChild(card);
     });
+
+    updateWishlistCount();
 }
 
 // Show course details in modal
@@ -303,12 +326,11 @@ function showCourseDetails(courseId) {
     document.getElementById('courseModal').style.display = 'block';
 }
 
-// Enroll in course
+// Enroll in course - NOW WITH PAYMENT CHECK
 function enrollCourse() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
 
     if (!user) {
-        // alert('Please login to enroll in courses!');
         window.location.href = '../login.html';
         return;
     }
@@ -321,20 +343,34 @@ function enrollCourse() {
         return;
     }
 
-    // Add course to user
-    user.courses.push(selectedCourseId);
+    // Close modal
+    document.getElementById('courseModal').style.display = 'none';
+
+    // Check if course is paid or free
+    if (course.price > 0) {
+        // Redirect to payment page
+        window.location.href = `payment.html?courseId=${selectedCourseId}`;
+    } else {
+        // Free course - enroll directly
+        enrollFreeCourse(selectedCourseId);
+    }
+}
+
+// Enroll in free course directly
+function enrollFreeCourse(courseId) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+
+    user.courses.push(courseId);
     localStorage.setItem('currentUser', JSON.stringify(user));
 
-    // Update user in users array
-    let users = JSON.parse(localStorage.getItem('users'));
+    let users = JSON.parse(localStorage.getItem('users')) || [];
     const userIndex = users.findIndex((u) => u.id === user.id);
     if (userIndex !== -1) {
         users[userIndex] = user;
         localStorage.setItem('users', JSON.stringify(users));
     }
 
-    // alert(`Successfully enrolled in ${course.title}!`);
-    document.getElementById('courseModal').style.display = 'none';
+    alert('Successfully enrolled in this free course!');
 }
 
 // Filter functionality
@@ -400,6 +436,9 @@ if (user) {
 
     loginBtn.style.display = 'none';
 
+    // Show wishlist
+    document.getElementById('wishlistNav').style.display = 'block';
+
     const profileLi = document.createElement('li');
     profileLi.innerHTML = '<a href="/student/profile.html">Profile</a>';
     navLinks.appendChild(profileLi);
@@ -413,6 +452,81 @@ if (user) {
 function logout() {
     localStorage.removeItem('currentUser');
     location.href = '../login.html';
+}
+
+// Toggle wishlist
+function toggleWishlist(courseId, event) {
+    event.stopPropagation();
+
+    if (!loggedInUser) {
+        alert('Please login to add courses to wishlist!');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    const wishlistIndex = loggedInUser.wishlist.indexOf(courseId);
+
+    if (wishlistIndex > -1) {
+        // Remove from wishlist
+        loggedInUser.wishlist.splice(wishlistIndex, 1);
+        showToast('Removed from wishlist', 'error');
+    } else {
+        // Add to wishlist
+        loggedInUser.wishlist.push(courseId);
+        showToast('Added to wishlist', 'success');
+    }
+
+    localStorage.setItem('currentUser', JSON.stringify(loggedInUser));
+    updateUserInStorage();
+
+    // Refresh the display
+    filterCourses();
+}
+
+// Update user in users array
+function updateUserInStorage() {
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+    const userIndex = users.findIndex((u) => u.id === loggedInUser.id);
+    if (userIndex !== -1) {
+        users[userIndex] = loggedInUser;
+        localStorage.setItem('users', JSON.stringify(users));
+    }
+}
+
+// Update wishlist count
+function updateWishlistCount() {
+    if (!loggedInUser) return;
+
+    const count = loggedInUser.wishlist.length;
+    const badge = document.getElementById('wishlistCount');
+
+    if (badge) {
+        badge.textContent = count;
+        if (count === 0) {
+            badge.classList.add('zero');
+        } else {
+            badge.classList.remove('zero');
+        }
+    }
+}
+
+// Show toast notification
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+
+    const icon = type === 'success' ? '✓' : '✕';
+
+    toast.innerHTML = `
+        <span class="toast-icon">${icon}</span>
+        <span class="toast-message">${message}</span>
+    `;
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
 }
 
 // Display all courses on page load
