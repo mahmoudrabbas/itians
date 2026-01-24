@@ -4,68 +4,477 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Admin Dashboard - Itians</title>
-        <link rel="stylesheet" href="../css/dashboard.css" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            body {
+                background: #f7f7f7;
+                color: #333;
+            }
+
+            .navbar {
+                background: #fff;
+                padding: 20px 0;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+
+            .navbar .container {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 0 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .navbar .brand {
+                font-size: 28px;
+                font-weight: bold;
+                color: #6610f2;
+            }
+
+            .nav-links {
+                list-style: none;
+                display: flex;
+                gap: 25px;
+                align-items: center;
+            }
+
+            .btn {
+                background: #6610f2;
+                color: #fff;
+                padding: 8px 18px;
+                border-radius: 6px;
+                border: none;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .btn:hover {
+                background: #520bcc;
+            }
+
+            .dashboard-wrapper {
+                display: flex;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .sidebar {
+                width: 250px;
+                background: #fff;
+                min-height: calc(100vh - 80px);
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 20px 0;
+            }
+
+            .menu-item {
+                padding: 15px 25px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                cursor: pointer;
+                transition: all 0.3s;
+                color: #555;
+                font-weight: 500;
+            }
+
+            .menu-item:hover {
+                background: #f0f0f0;
+                color: #6610f2;
+            }
+
+            .menu-item.active {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: #fff;
+                border-left: 4px solid #6610f2;
+            }
+
+            .menu-item .icon {
+                font-size: 20px;
+            }
+
+            .main-content {
+                flex: 1;
+                padding: 30px;
+            }
+
+            .content-section {
+                display: none;
+            }
+
+            .content-section.active {
+                display: block;
+            }
+
+            .page-header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 2rem;
+                border-radius: 10px;
+                margin-bottom: 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .page-header .btn {
+                background: #fff;
+                color: #6610f2;
+                font-weight: 600;
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin-bottom: 2rem;
+            }
+
+            .stat-card {
+                background: #fff;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .stat-icon {
+                width: 60px;
+                height: 60px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 28px;
+            }
+
+            .stat-info h3 {
+                font-size: 2rem;
+                color: #2c3e50;
+            }
+
+            .stat-info p {
+                color: #7f8c8d;
+                font-size: 0.9rem;
+            }
+
+            .filters {
+                background: white;
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                display: flex;
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            }
+
+            .filter-group {
+                display: flex;
+                gap: 0.5rem;
+                align-items: center;
+            }
+
+            .filter-group input,
+            .filter-group select {
+                padding: 0.6rem;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                font-size: 0.9rem;
+                min-width: 200px;
+            }
+
+            .data-table {
+                background: #fff;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+            }
+
+            .data-table table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .data-table thead {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+            }
+
+            .data-table th {
+                padding: 15px;
+                text-align: left;
+                font-weight: 600;
+            }
+
+            .data-table td {
+                padding: 15px;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .action-btn {
+                padding: 6px 12px;
+                margin: 0 3px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 0.85rem;
+            }
+
+            .btn-edit {
+                background: #3498db;
+                color: white;
+            }
+
+            .btn-delete {
+                background: #e74c3c;
+                color: white;
+            }
+
+            .categories-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 20px;
+            }
+
+            .category-card {
+                background: white;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+
+            .category-icon {
+                font-size: 3rem;
+                margin-bottom: 15px;
+            }
+
+            .category-card h3 {
+                color: #2c3e50;
+                margin-bottom: 10px;
+            }
+
+            .category-actions {
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+                margin-top: 15px;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.6);
+                overflow-y: auto;
+            }
+
+            .modal.show {
+                display: block;
+            }
+
+            .modal-content {
+                background-color: #fff;
+                margin: 3% auto;
+                padding: 2rem;
+                border-radius: 10px;
+                width: 90%;
+                max-width: 600px;
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .close:hover {
+                color: #000;
+            }
+
+            .form-group {
+                margin-bottom: 1.2rem;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+                color: #555;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                padding: 0.8rem;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                font-family: inherit;
+            }
+
+            .form-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            .courses-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 20px;
+            }
+
+            .course-card {
+                background: white;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .course-image {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+            }
+
+            .course-body {
+                padding: 1.2rem;
+            }
+
+            .course-category {
+                display: inline-block;
+                background: #3498db;
+                color: white;
+                padding: 0.3rem 0.8rem;
+                border-radius: 20px;
+                font-size: 0.75rem;
+            }
+
+            .content-item {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                border: 2px solid #e0e0e0;
+                position: relative;
+            }
+
+            .content-item-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            .content-number {
+                background: #6610f2;
+                color: white;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                font-size: 0.9rem;
+            }
+
+            .btn-remove {
+                background: #e74c3c;
+                color: white;
+                border: none;
+                padding: 6px 12px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 0.85rem;
+            }
+        </style>
     </head>
     <body>
-        <!-- NAVBAR -->
         <nav class="navbar">
             <div class="container">
-                <a href="../index.html" class="brand">Itians Admin</a>
+                <a href="/index.html" class="brand">Itians Admin</a>
                 <ul class="nav-links">
-                    <li><a href="#" class="active">Dashboard</a></li>
                     <li>
-                        <span
-                            id="adminName"
-                            style="color: #6610f2; font-weight: 600"
-                        ></span>
+                        <span style="color: #6610f2; font-weight: 600">
+                            Admin User
+                        </span>
                     </li>
-                    <li>
-                        <a href="#" class="btn" onclick="logout()">Logout</a>
-                    </li>
+                    <li><button class="btn">Logout</button></li>
                 </ul>
             </div>
         </nav>
 
-        <!-- DASHBOARD CONTAINER -->
         <div class="dashboard-wrapper">
-            <!-- SIDEBAR -->
             <aside class="sidebar">
                 <ul class="sidebar-menu">
-                    <li class="menu-item active" data-section="overview">
+                    <li
+                        class="menu-item active"
+                        onclick="switchSection('overview')"
+                    >
                         <span class="icon">📊</span>
                         <span>Overview</span>
                     </li>
-                    <li class="menu-item" data-section="courses">
+                    <li class="menu-item" onclick="switchSection('courses')">
                         <span class="icon">📚</span>
                         <span>Manage Courses</span>
                     </li>
-                    <li class="menu-item" data-section="categories">
+                    <li class="menu-item" onclick="switchSection('categories')">
                         <span class="icon">🏷️</span>
                         <span>Manage Categories</span>
                     </li>
-                    <li class="menu-item" data-section="students">
+                    <li class="menu-item" onclick="switchSection('students')">
                         <span class="icon">👥</span>
                         <span>Students</span>
                     </li>
-                    <li class="menu-item" data-section="enrollments">
+                    <li
+                        class="menu-item"
+                        onclick="switchSection('enrollments')"
+                    >
                         <span class="icon">✅</span>
                         <span>Enrollments</span>
                     </li>
                 </ul>
             </aside>
 
-            <!-- MAIN CONTENT -->
             <main class="main-content">
-                <!-- OVERVIEW SECTION -->
                 <section id="overview" class="content-section active">
                     <div class="page-header">
-                        <h1>Dashboard Overview</h1>
-                        <p>
-                            Welcome back! Here's what's happening with your
-                            platform.
-                        </p>
+                        <div>
+                            <h1>Dashboard Overview</h1>
+                            <p>Welcome back!</p>
+                        </div>
                     </div>
-
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-icon" style="background: #3498db">
@@ -104,14 +513,14 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="recent-section">
-                        <h2>Recent Courses</h2>
+                    <div>
+                        <h2 style="color: #2c3e50; margin-bottom: 1rem">
+                            Recent Courses
+                        </h2>
                         <div id="recentCourses" class="courses-grid"></div>
                     </div>
                 </section>
 
-                <!-- COURSES SECTION -->
                 <section id="courses" class="content-section">
                     <div class="page-header">
                         <h1>Manage Courses</h1>
@@ -119,28 +528,29 @@
                             + Add New Course
                         </button>
                     </div>
-
                     <div class="filters">
                         <div class="filter-group">
                             <label>Search:</label>
                             <input
                                 type="text"
                                 id="courseSearch"
-                                placeholder="Search courses..."
+                                placeholder="Search..."
+                                onkeyup="filterCourses()"
                             />
                         </div>
                         <div class="filter-group">
                             <label>Category:</label>
-                            <select id="courseCategoryFilter">
+                            <select
+                                id="courseCategoryFilter"
+                                onchange="filterCourses()"
+                            >
                                 <option value="all">All Categories</option>
                             </select>
                         </div>
                     </div>
-
                     <div id="coursesTable" class="data-table"></div>
                 </section>
 
-                <!-- CATEGORIES SECTION -->
                 <section id="categories" class="content-section">
                     <div class="page-header">
                         <h1>Manage Categories</h1>
@@ -148,44 +558,25 @@
                             + Add New Category
                         </button>
                     </div>
-
                     <div id="categoriesGrid" class="categories-grid"></div>
                 </section>
 
-                <!-- STUDENTS SECTION -->
                 <section id="students" class="content-section">
                     <div class="page-header">
                         <h1>Students Management</h1>
-                        <p>View and manage all registered students</p>
                     </div>
-
-                    <div class="filters">
-                        <div class="filter-group">
-                            <label>Search:</label>
-                            <input
-                                type="text"
-                                id="studentSearch"
-                                placeholder="Search students..."
-                            />
-                        </div>
-                    </div>
-
                     <div id="studentsTable" class="data-table"></div>
                 </section>
 
-                <!-- ENROLLMENTS SECTION -->
                 <section id="enrollments" class="content-section">
                     <div class="page-header">
                         <h1>Course Enrollments</h1>
-                        <p>Monitor all student enrollments</p>
                     </div>
-
                     <div id="enrollmentsTable" class="data-table"></div>
                 </section>
             </main>
         </div>
 
-        <!-- COURSE MODAL -->
         <div id="courseModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeCourseModal()">&times;</span>
@@ -230,26 +621,50 @@
                             <input
                                 type="text"
                                 id="courseDuration"
-                                placeholder="e.g., 12 weeks"
+                                placeholder="12 weeks"
                                 required
                             />
                         </div>
                     </div>
+
+                    <!-- Course Content Section -->
+                    <div
+                        style="
+                            margin-top: 2rem;
+                            padding-top: 2rem;
+                            border-top: 2px solid #e0e0e0;
+                        "
+                    >
+                        <h3 style="margin-bottom: 1rem; color: #2c3e50">
+                            Course Content (Videos & PDFs)
+                        </h3>
+                        <div id="contentItems"></div>
+                        <button
+                            type="button"
+                            class="btn"
+                            onclick="addContentItem()"
+                            style="
+                                width: 100%;
+                                background: #27ae60;
+                                margin-top: 10px;
+                            "
+                        >
+                            + Add Content Item
+                        </button>
+                    </div>
+
                     <input type="hidden" id="courseId" />
-                    <button type="submit" class="btn btn-submit">
-                        Save Course
-                    </button>
+                    <button type="submit" class="btn">Save Course</button>
                 </form>
             </div>
         </div>
 
-        <!-- CATEGORY MODAL -->
         <div id="categoryModal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeCategoryModal()">
                     &times;
                 </span>
-                <h2 id="categoryModalTitle">Add New Category</h2>
+                <h2>Add New Category</h2>
                 <form id="categoryForm" onsubmit="saveCategory(event)">
                     <div class="form-group">
                         <label>Category Name *</label>
@@ -269,18 +684,437 @@
                             type="text"
                             id="categoryIcon"
                             maxlength="2"
-                            placeholder="e.g., 💻"
+                            placeholder="💻"
                         />
                     </div>
                     <input type="hidden" id="categoryId" />
-                    <button type="submit" class="btn btn-submit">
-                        Save Category
-                    </button>
+                    <button type="submit" class="btn">Save Category</button>
                 </form>
             </div>
         </div>
 
-        <script src="../js/admin-setup.js"></script>
-        <script src="../js/admin-dashboard.js"></script>
+        <script>
+            // Read courses from localStorage
+            let courses = JSON.parse(localStorage.getItem('courses')) || [
+                {
+                    id: 1,
+                    title: 'Full Stack Web Development',
+                    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500',
+                    category: 'Programming',
+                    instructor: 'Ahmed Hassan',
+                    description:
+                        'Master HTML, CSS, JavaScript, React, Node.js and MongoDB.',
+                    price: 499,
+                    duration: '12 weeks',
+                    content: [],
+                },
+                {
+                    id: 2,
+                    title: 'Cybersecurity Fundamentals',
+                    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500',
+                    category: 'Cybersecurity',
+                    instructor: 'Sara Mohamed',
+                    description:
+                        'Learn ethical hacking and penetration testing.',
+                    price: 599,
+                    duration: '10 weeks',
+                    content: [],
+                },
+                {
+                    id: 3,
+                    title: 'Python for Data Science',
+                    image: 'https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500',
+                    category: 'Data Science',
+                    instructor: 'Omar Ali',
+                    description: 'Learn Python programming and data analysis.',
+                    price: 0,
+                    duration: '8 weeks',
+                    content: [],
+                },
+            ];
+
+            let categories = JSON.parse(localStorage.getItem('categories')) || [
+                {
+                    id: 1,
+                    name: 'Programming',
+                    description: 'Programming languages',
+                    icon: '💻',
+                },
+                {
+                    id: 2,
+                    name: 'Cybersecurity',
+                    description: 'Security courses',
+                    icon: '🔒',
+                },
+                {
+                    id: 3,
+                    name: 'Data Science',
+                    description: 'Data analysis',
+                    icon: '📊',
+                },
+                {
+                    id: 4,
+                    name: 'Networking',
+                    description: 'Network infrastructure',
+                    icon: '🌐',
+                },
+            ];
+
+            let students = JSON.parse(localStorage.getItem('users')) || [
+                {
+                    id: 1,
+                    name: 'Mohamed Ali',
+                    email: 'mohamed@example.com',
+                    courses: [1, 2],
+                },
+                {
+                    id: 2,
+                    name: 'Fatma Ahmed',
+                    email: 'fatma@example.com',
+                    courses: [3],
+                },
+            ];
+
+            // Save to localStorage whenever data changes
+            function saveToLocalStorage() {
+                localStorage.setItem('courses', JSON.stringify(courses));
+                localStorage.setItem('categories', JSON.stringify(categories));
+                localStorage.setItem('users', JSON.stringify(students));
+            }
+
+            let editingCourseId = null;
+            let editingCategoryId = null;
+            let courseContent = [];
+
+            function switchSection(section) {
+                document
+                    .querySelectorAll('.content-section')
+                    .forEach((s) => s.classList.remove('active'));
+                document
+                    .querySelectorAll('.menu-item')
+                    .forEach((m) => m.classList.remove('active'));
+                document.getElementById(section).classList.add('active');
+                event.target.closest('.menu-item').classList.add('active');
+
+                if (section === 'overview') renderOverview();
+                if (section === 'courses') renderCourses();
+                if (section === 'categories') renderCategories();
+                if (section === 'students') renderStudents();
+                if (section === 'enrollments') renderEnrollments();
+            }
+
+            function renderOverview() {
+                document.getElementById('totalCourses').textContent =
+                    courses.length;
+                document.getElementById('totalStudents').textContent =
+                    students.length;
+                document.getElementById('totalCategories').textContent =
+                    categories.length;
+                let total = students.reduce(
+                    (sum, s) => sum + s.courses.length,
+                    0
+                );
+                document.getElementById('totalEnrollments').textContent = total;
+
+                let html = '';
+                courses.slice(0, 3).forEach((c) => {
+                    html += `<div class="course-card">
+                    <img src="${c.image}" class="course-image">
+                    <div class="course-body">
+                        <span class="course-category">${c.category}</span>
+                        <h3>${c.title}</h3>
+                        <p>By ${c.instructor}</p>
+                    </div>
+                </div>`;
+                });
+                document.getElementById('recentCourses').innerHTML = html;
+            }
+
+            function renderCourses() {
+                updateCategoryFilter();
+                let html =
+                    '<table><thead><tr><th>Title</th><th>Category</th><th>Instructor</th><th>Price</th><th>Duration</th><th>Actions</th></tr></thead><tbody>';
+                courses.forEach((c) => {
+                    html += `<tr>
+                    <td>${c.title}</td>
+                    <td>${c.category}</td>
+                    <td>${c.instructor}</td>
+                    <td>${c.price === 0 ? 'Free' : '$' + c.price}</td>
+                    <td>${c.duration}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editCourse(${c.id})">Edit</button>
+                        <button class="action-btn btn-delete" onclick="deleteCourse(${c.id})">Delete</button>
+                    </td>
+                </tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('coursesTable').innerHTML = html;
+            }
+
+            function filterCourses() {
+                let search = document
+                    .getElementById('courseSearch')
+                    .value.toLowerCase();
+                let catFilter = document.getElementById(
+                    'courseCategoryFilter'
+                ).value;
+                let filtered = courses.filter((c) => {
+                    let match1 =
+                        c.title.toLowerCase().includes(search) ||
+                        c.instructor.toLowerCase().includes(search);
+                    let match2 =
+                        catFilter === 'all' || c.category === catFilter;
+                    return match1 && match2;
+                });
+
+                let html =
+                    '<table><thead><tr><th>Title</th><th>Category</th><th>Instructor</th><th>Price</th><th>Duration</th><th>Actions</th></tr></thead><tbody>';
+                filtered.forEach((c) => {
+                    html += `<tr>
+                    <td>${c.title}</td>
+                    <td>${c.category}</td>
+                    <td>${c.instructor}</td>
+                    <td>${c.price === 0 ? 'Free' : '$' + c.price}</td>
+                    <td>${c.duration}</td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editCourse(${c.id})">Edit</button>
+                        <button class="action-btn btn-delete" onclick="deleteCourse(${c.id})">Delete</button>
+                    </td>
+                </tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('coursesTable').innerHTML = html;
+            }
+
+            function updateCategoryFilter() {
+                let html1 = '<option value="all">All Categories</option>';
+                let html2 = '';
+                categories.forEach((cat) => {
+                    html1 += `<option value="${cat.name}">${cat.name}</option>`;
+                    html2 += `<option value="${cat.name}">${cat.name}</option>`;
+                });
+                document.getElementById('courseCategoryFilter').innerHTML =
+                    html1;
+                document.getElementById('courseCategory').innerHTML = html2;
+            }
+
+            function openCourseModal() {
+                editingCourseId = null;
+                courseContent = [];
+                document.getElementById('courseModalTitle').textContent =
+                    'Add New Course';
+                document.getElementById('courseForm').reset();
+                updateCategoryFilter();
+                renderContentItems();
+                document.getElementById('courseModal').classList.add('show');
+            }
+
+            function closeCourseModal() {
+                document.getElementById('courseModal').classList.remove('show');
+            }
+
+            function editCourse(id) {
+                let c = courses.find((x) => x.id === id);
+                editingCourseId = id;
+                courseContent = c.content || [];
+                document.getElementById('courseModalTitle').textContent =
+                    'Edit Course';
+                document.getElementById('courseTitle').value = c.title;
+                document.getElementById('courseCategory').value = c.category;
+                document.getElementById('courseInstructor').value =
+                    c.instructor;
+                document.getElementById('courseDescription').value =
+                    c.description;
+                document.getElementById('courseImage').value = c.image;
+                document.getElementById('coursePrice').value = c.price;
+                document.getElementById('courseDuration').value = c.duration;
+                updateCategoryFilter();
+                renderContentItems();
+                document.getElementById('courseModal').classList.add('show');
+            }
+
+            function saveCourse(e) {
+                e.preventDefault();
+                let data = {
+                    title: document.getElementById('courseTitle').value,
+                    category: document.getElementById('courseCategory').value,
+                    instructor:
+                        document.getElementById('courseInstructor').value,
+                    description:
+                        document.getElementById('courseDescription').value,
+                    image: document.getElementById('courseImage').value,
+                    price: Number(document.getElementById('coursePrice').value),
+                    duration: document.getElementById('courseDuration').value,
+                    content: courseContent,
+                };
+
+                if (editingCourseId) {
+                    let idx = courses.findIndex(
+                        (c) => c.id === editingCourseId
+                    );
+                    courses[idx] = { ...data, id: editingCourseId };
+                } else {
+                    courses.push({ ...data, id: Date.now() });
+                }
+
+                saveToLocalStorage();
+                closeCourseModal();
+                renderCourses();
+                renderOverview();
+            }
+
+            function addContentItem() {
+                courseContent.push({ title: '', type: 'video', link: '' });
+                renderContentItems();
+            }
+
+            function removeContentItem(index) {
+                courseContent.splice(index, 1);
+                renderContentItems();
+            }
+
+            function updateContentItem(index, field, value) {
+                courseContent[index][field] = value;
+            }
+
+            function renderContentItems() {
+                let html = '';
+                courseContent.forEach((item, i) => {
+                    html += `
+                    <div class="content-item">
+                        <div class="content-item-header">
+                            <div class="content-number">${i + 1}</div>
+                            <button type="button" class="btn-remove" onclick="removeContentItem(${i})">Remove</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Content Title</label>
+                            <input type="text" value="${item.title}" onchange="updateContentItem(${i}, 'title', this.value)" placeholder="e.g., Introduction to HTML">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
+                            <div class="form-group">
+                                <label>Type</label>
+                                <select onchange="updateContentItem(${i}, 'type', this.value)">
+                                    <option value="video" ${item.type === 'video' ? 'selected' : ''}>Video</option>
+                                    <option value="pdf" ${item.type === 'pdf' ? 'selected' : ''}>PDF</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Link (YouTube embed or PDF URL)</label>
+                                <input type="url" value="${item.link}" onchange="updateContentItem(${i}, 'link', this.value)" placeholder="https://www.youtube.com/embed/...">
+                            </div>
+                        </div>
+                    </div>
+                `;
+                });
+                document.getElementById('contentItems').innerHTML = html;
+            }
+
+            function deleteCourse(id) {
+                if (confirm('Delete this course?')) {
+                    courses = courses.filter((c) => c.id !== id);
+                    saveToLocalStorage();
+                    renderCourses();
+                    renderOverview();
+                }
+            }
+
+            function renderCategories() {
+                let html = '';
+                categories.forEach((cat) => {
+                    html += `<div class="category-card">
+                    <div class="category-icon">${cat.icon}</div>
+                    <h3>${cat.name}</h3>
+                    <p>${cat.description}</p>
+                    <div class="category-actions">
+                        <button class="action-btn btn-edit" onclick="editCategory(${cat.id})">Edit</button>
+                        <button class="action-btn btn-delete" onclick="deleteCategory(${cat.id})">Delete</button>
+                    </div>
+                </div>`;
+                });
+                document.getElementById('categoriesGrid').innerHTML = html;
+            }
+
+            function openCategoryModal() {
+                editingCategoryId = null;
+                document.getElementById('categoryForm').reset();
+                document.getElementById('categoryModal').classList.add('show');
+            }
+
+            function closeCategoryModal() {
+                document
+                    .getElementById('categoryModal')
+                    .classList.remove('show');
+            }
+
+            function editCategory(id) {
+                let cat = categories.find((c) => c.id === id);
+                editingCategoryId = id;
+                document.getElementById('categoryName').value = cat.name;
+                document.getElementById('categoryDescription').value =
+                    cat.description;
+                document.getElementById('categoryIcon').value = cat.icon;
+                document.getElementById('categoryModal').classList.add('show');
+            }
+
+            function saveCategory(e) {
+                e.preventDefault();
+                let data = {
+                    name: document.getElementById('categoryName').value,
+                    description: document.getElementById('categoryDescription')
+                        .value,
+                    icon: document.getElementById('categoryIcon').value,
+                };
+
+                if (editingCategoryId) {
+                    let idx = categories.findIndex(
+                        (c) => c.id === editingCategoryId
+                    );
+                    categories[idx] = { ...data, id: editingCategoryId };
+                } else {
+                    categories.push({ ...data, id: Date.now() });
+                }
+
+                saveToLocalStorage();
+                closeCategoryModal();
+                renderCategories();
+                renderOverview();
+            }
+
+            function deleteCategory(id) {
+                if (confirm('Delete this category?')) {
+                    categories = categories.filter((c) => c.id !== id);
+                    saveToLocalStorage();
+                    renderCategories();
+                    renderOverview();
+                }
+            }
+
+            function renderStudents() {
+                let html =
+                    '<table><thead><tr><th>Name</th><th>Email</th><th>Enrolled Courses</th></tr></thead><tbody>';
+                students.forEach((s) => {
+                    html += `<tr><td>${s.name}</td><td>${s.email}</td><td>${s.courses.length}</td></tr>`;
+                });
+                html += '</tbody></table>';
+                document.getElementById('studentsTable').innerHTML = html;
+            }
+
+            function renderEnrollments() {
+                let html =
+                    '<table><thead><tr><th>Student</th><th>Course</th><th>Price</th></tr></thead><tbody>';
+                students.forEach((s) => {
+                    s.courses.forEach((cid) => {
+                        let c = courses.find((x) => x.id === cid);
+                        if (c) {
+                            html += `<tr><td>${s.name}</td><td>${c.title}</td><td>${c.price === 0 ? 'Free' : '$' + c.price}</td></tr>`;
+                        }
+                    });
+                });
+                html += '</tbody></table>';
+                document.getElementById('enrollmentsTable').innerHTML = html;
+            }
+
+            renderOverview();
+        </script>
     </body>
 </html>
