@@ -362,6 +362,20 @@ function enrollFreeCourse(courseId) {
 }
 
 // filter courses by gategory and prices
+
+const filterCategory = document.getElementById('categoryFilter');
+
+// get categories from localstroage under categories name dynamically and populate the category filter
+const categoryList = localStorage.getItem('categories');
+console.log(categoryList);
+
+for (let category of JSON.parse(categoryList)) {
+    const option = document.createElement('option');
+    option.value = category.name;
+    option.textContent = category.name;
+    filterCategory.appendChild(option);
+}
+
 document
     .getElementById('categoryFilter')
     .addEventListener('change', filterCourses);

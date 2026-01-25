@@ -5,29 +5,17 @@ function initializeAdmin() {
 
     if (!adminExists) {
         const admin1 = {
-            id: 'admin_1' + Date.now(),
-            name: 'Admin1',
-            email: 'admin1@gmail.com',
+            id: 'admin' + Date.now(),
+            name: 'Admin',
+            email: 'admin@gmail.com',
             password: 'admin123',
             role: 'admin',
             courses: [],
             wishlists: [],
-            createdAt: new Date().toISOString(),
-        };
-
-        const admin2 = {
-            id: 'admin_2' + Date.now(),
-            name: 'Admin2',
-            email: 'admin2@gmail.com',
-            password: 'admin123',
-            role: 'admin',
-            wishlists: [],
-            courses: [],
             createdAt: new Date().toISOString(),
         };
 
         users.push(admin1);
-        users.push(admin2);
 
         localStorage.setItem('users', JSON.stringify(users));
     }

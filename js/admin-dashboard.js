@@ -1,3 +1,8 @@
+const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+if (!currentUser || currentUser.role !== 'admin') {
+    window.location.href = '../index.html';
+}
+
 // read courses from localStorage
 let courses = JSON.parse(localStorage.getItem('courses')) || [
     {

@@ -47,12 +47,12 @@ function login(event) {
     let foundUser = users.find((u) => u.email === email);
 
     if (!foundUser) {
-        document.getElementById('emailmsg').innerHTML = 'Account not found';
+        document.getElementById('passmsg').innerHTML = 'Invalid data';
         return;
     }
 
     if (password !== foundUser.password) {
-        document.getElementById('passmsg').innerHTML = 'Wrong password';
+        document.getElementById('passmsg').innerHTML = 'invalid data';
         return;
     }
 
@@ -81,11 +81,11 @@ function validatename() {
 
     if (name.length < 3) {
         document.getElementById('namemsg').innerHTML =
-            '*Username must be at least 3 characters';
+            'Username must be at least 3 characters';
         return false;
     } else if (!nameregex.test(name)) {
         document.getElementById('namemsg').innerHTML =
-            '*Name must contain letters only';
+            'Name must contain letters only';
         return false;
     }
     document.getElementById('namemsg').innerHTML = '';
@@ -97,7 +97,7 @@ function validateemail() {
     const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 
     if (!gmailRegex.test(email)) {
-        document.getElementById('emailmsg').innerHTML = '*not valid email';
+        document.getElementById('emailmsg').innerHTML = 'Not valid email';
         return false;
     }
     document.getElementById('emailmsg').innerHTML = '';
@@ -117,9 +117,9 @@ function validatepassword() {
         !passwordregex.test(password)
     ) {
         document.getElementsByClassName('passmsg')[0].innerHTML =
-            '*Password must be 8+ characters include uppercase lowercase and a number';
+            'Password must be 8+ characters include uppercase lowercase and a number';
         document.getElementsByClassName('passmsg')[1].innerHTML =
-            '*Password must be 8+ characters include uppercase lowercase and a number';
+            'Password must be 8+ characters include uppercase lowercase and a number';
         return false;
     }
 
