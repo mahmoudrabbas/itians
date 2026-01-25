@@ -10,13 +10,11 @@ body {
     background: #f7f7f7;
     color: #333;
 }
-/* CONTAINER */
 .container {
     width: 1200px;
     margin: auto;
 }
 
-/* NAVBAR */
 .navbar {
     background: #fff;
     padding: 20px 0;
@@ -65,7 +63,6 @@ body {
     background: #520bcc;
 }
 
-/* CONTACT HERO */
 .contact-hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
@@ -82,7 +79,6 @@ body {
     font-size: 1.2rem;
 }
 
-/* CONTACT FORM */
 .contact-section {
     padding: 80px 0;
 }
@@ -122,7 +118,6 @@ body {
     resize: none;
 }
 
-/* BUTTON */
 .contact-form .btn {
     width: 100%;
     padding: 12px;
@@ -140,7 +135,6 @@ body {
     background: #520bcc;
 }
 
-/* FOOTER */
 .footer {
     background: #222;
     color: #ccc;

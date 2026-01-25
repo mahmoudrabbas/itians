@@ -10,7 +10,6 @@ body {
     color: #333;
 }
 
-/* NAVBAR */
 .navbar {
     background: #fff;
     padding: 20px 0;
@@ -54,7 +53,6 @@ body {
     color: #6610f2;
 }
 
-/* PAYMENT WRAPPER */
 .payment-wrapper {
     padding: 40px 0;
     min-height: calc(100vh - 80px);
@@ -73,7 +71,6 @@ body {
     margin-top: 20px;
 }
 
-/* COURSE SUMMARY CARD */
 .course-summary-card {
     background: #fff;
     padding: 30px;
@@ -132,7 +129,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* PRICE BREAKDOWN */
 .price-breakdown {
     background: #f8f9fa;
     padding: 20px;
@@ -380,17 +376,7 @@ body {
     border-radius: 50%;
     width: 60px;
     height: 60px;
-    animation: spin 1s linear infinite;
     margin: 0 auto 30px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
 }
 
 .loading-content h3 {
@@ -402,7 +388,6 @@ body {
     color: #7f8c8d;
 }
 
-/* SUCCESS */
 .success-content {
     padding: 60px 40px;
 }
@@ -418,19 +403,6 @@ body {
     align-items: center;
     justify-content: center;
     margin: 0 auto 30px;
-    animation: scaleIn 0.5s ease-out;
-}
-
-@keyframes scaleIn {
-    0% {
-        transform: scale(0);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-    }
 }
 
 .success-content h2 {

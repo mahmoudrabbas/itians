@@ -10,47 +10,11 @@ body {
     color: #333;
 }
 
-/* .navbar {
-    background: #2c3e50;
-    padding: 1rem 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-} */
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
-
-/* .navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.brand {
-    color: #fff;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 2rem;
-    align-items: center;
-}
-
-.nav-links a {
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: #3498db;
-} */
 
 .btn {
     background: #3498db;
@@ -62,10 +26,6 @@ body {
     border: none;
     cursor: pointer;
 }
-/* 
-.btn:hover {
-    background: #2980b9;
-} */
 
 .page-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -275,7 +235,6 @@ body {
     text-decoration: none;
 }
 
-/* Modal for editing profile */
 .modal {
     display: none;
     position: fixed;

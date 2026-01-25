@@ -30,7 +30,6 @@ function initializeAdmin() {
         users.push(admin2);
 
         localStorage.setItem('users', JSON.stringify(users));
-        // console.log('Admin user created successfully');
     }
 }
 
@@ -128,7 +127,7 @@ function enrollFree(courseId) {
     location.reload();
 }
 
-// Export functions for use in other files
+// export functions to use in other files
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { isAdmin, protectAdminRoute, handleEnrollment };
 }

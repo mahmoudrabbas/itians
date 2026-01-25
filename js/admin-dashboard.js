@@ -1,4 +1,4 @@
-// Read courses from localStorage
+// read courses from localStorage
 let courses = JSON.parse(localStorage.getItem('courses')) || [
     {
         id: 1,

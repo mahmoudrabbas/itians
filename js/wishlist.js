@@ -1,11 +1,9 @@
-// Check if user is logged in
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 if (!currentUser) {
-    alert('Please login to view your wishlist!');
-    window.location.href = 'login.html';
+    alert('please login to view your wishlist!');
+    window.location.href = '../login.html';
 }
 
-// Initialize wishlist
 if (!currentUser.wishlist) {
     currentUser.wishlist = [];
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -14,7 +12,6 @@ if (!currentUser.wishlist) {
 
 let selectedCourseId = null;
 
-// Load wishlist courses
 function loadWishlist() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const wishlistCourses = courses.filter((c) =>
@@ -35,7 +32,6 @@ function loadWishlist() {
     displayWishlistCourses(wishlistCourses);
 }
 
-// Display wishlist courses
 function displayWishlistCourses(courses) {
     const grid = document.getElementById('wishlistGrid');
     grid.innerHTML = '';
@@ -70,7 +66,6 @@ function displayWishlistCourses(courses) {
     });
 }
 
-// Update wishlist count
 function updateWishlistCount() {
     const count = currentUser.wishlist.length;
     const badge = document.getElementById('wishlistCount');
@@ -85,7 +80,6 @@ function updateWishlistCount() {
     }
 }
 
-// Remove from wishlist
 function removeFromWishlist(courseId, event) {
     if (event) {
         event.stopPropagation();
@@ -99,7 +93,6 @@ function removeFromWishlist(courseId, event) {
     loadWishlist();
 }
 
-// Show course details modal
 function showCourseDetails(courseId) {
     selectedCourseId = courseId;
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
@@ -130,34 +123,30 @@ function showCourseDetails(courseId) {
     document.getElementById('courseModal').style.display = 'block';
 }
 
-// Remove from wishlist (from modal)
 function removeFromWishlistModal() {
     removeFromWishlist(selectedCourseId);
     document.getElementById('courseModal').style.display = 'none';
 }
 
-// Enroll in course
 function enrollCourse() {
     const courses = JSON.parse(localStorage.getItem('courses')) || [];
     const course = courses.find((c) => c.id === selectedCourseId);
 
-    // Check if already enrolled
+    //check if already enrolled
     if (currentUser.courses.includes(selectedCourseId)) {
         alert('You are already enrolled in this course!');
         return;
     }
 
-    // Close modal
     document.getElementById('courseModal').style.display = 'none';
 
-    // Remove from wishlist
+    // temove from wishlist
     currentUser.wishlist = currentUser.wishlist.filter(
         (id) => id !== selectedCourseId
     );
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
     updateUserInStorage();
 
-    // Check if course is paid or free
     if (course.price > 0) {
         window.location.href = `payment.html?courseId=${selectedCourseId}`;
     } else {
@@ -165,7 +154,6 @@ function enrollCourse() {
     }
 }
 
-// Enroll in free course
 function enrollFreeCourse(courseId) {
     currentUser.courses.push(courseId);
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -175,7 +163,6 @@ function enrollFreeCourse(courseId) {
     loadWishlist();
 }
 
-// Update user in users array
 function updateUserInStorage() {
     let users = JSON.parse(localStorage.getItem('users')) || [];
     const userIndex = users.findIndex((u) => u.id === currentUser.id);
@@ -185,7 +172,6 @@ function updateUserInStorage() {
     }
 }
 
-// Show toast notification
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
@@ -204,7 +190,6 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-// Close modal
 document.querySelector('.close').onclick = function () {
     document.getElementById('courseModal').style.display = 'none';
 };
@@ -215,7 +200,6 @@ window.onclick = function (event) {
     }
 };
 
-// Handle navbar for logged in users
 const loginBtn = document.getElementById('loginbtn');
 const navLinks = document.querySelector('.nav-links');
 
@@ -243,5 +227,4 @@ function logout() {
     location.href = 'login.html';
 }
 
-// Load wishlist on page load
 loadWishlist();

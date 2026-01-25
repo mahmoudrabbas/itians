@@ -11,13 +11,11 @@ body {
     color: #333;
 }
 
-/* CONTAINER */
 .container {
     width: 1200px;
     margin: auto;
 }
 
-/* NAVBAR */
 .navbar {
     background: #fff;
     padding: 20px 0;
@@ -66,7 +64,6 @@ body {
     background: #520bcc;
 }
 
-/* HERO SECTION */
 .about-hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #fff;
@@ -99,7 +96,6 @@ body {
     background: #e5e5e5;
 }
 
-/* ABOUT CARDS */
 .about-cards {
     padding: 80px 0;
 }
@@ -145,7 +141,6 @@ body {
     margin-bottom: 10px;
 }
 
-/* FOOTER */
 .footer {
     background: #222;
     color: #ccc;

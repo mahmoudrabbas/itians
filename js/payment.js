@@ -1,15 +1,13 @@
-// Get course ID from URL
+//getting courseId from url
 const urlParams = new URLSearchParams(window.location.search);
 const courseId = parseInt(urlParams.get('courseId'));
 
-// Check if user is logged in
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 if (!currentUser) {
     alert('Please login to enroll in courses!');
     window.location.href = 'login.html';
 }
 
-// Load course data
 let course = null;
 let selectedPaymentMethod = 'paypal';
 
@@ -23,21 +21,18 @@ function loadCourseData() {
         return;
     }
 
-    // Check if course is free (shouldn't be on payment page)
     if (course.price === 0) {
         alert('This course is free! Redirecting to enrollment...');
         enrollDirectly();
         return;
     }
 
-    // Check if already enrolled
     if (currentUser.courses.includes(courseId)) {
         alert('You are already enrolled in this course!');
-        window.location.href = 'student/profile.html';
+        window.location.href = '../student/profile.html';
         return;
     }
 
-    // Populate course information
     document.getElementById('courseImage').src = course.image;
     document.getElementById('courseTitle').textContent = course.title;
     document.getElementById('courseInstructor').textContent = course.instructor;
@@ -46,27 +41,26 @@ function loadCourseData() {
     document.getElementById('coursePrice').textContent = `$${course.price}`;
     document.getElementById('totalPrice').textContent = `$${course.price}`;
 
-    // Update user name in navbar
     document.getElementById('userNameNav').textContent = currentUser.name;
 }
 
-// Payment method selection
+// payment method selection
 document.querySelectorAll('.payment-option').forEach((option) => {
     option.addEventListener('click', function () {
-        // Remove selected from all
+        // remove selected from all
         document.querySelectorAll('.payment-option').forEach((opt) => {
             opt.classList.remove('selected');
         });
 
-        // Add selected to clicked
+        // adding selected to clicked
         this.classList.add('selected');
 
-        // Check the radio button
+        // check the radio button
         const radio = this.querySelector('input[type="radio"]');
         radio.checked = true;
         selectedPaymentMethod = radio.value;
 
-        // Show/hide Stripe form
+        // show/hide stripe form
         const stripeForm = document.getElementById('stripeForm');
         if (selectedPaymentMethod === 'stripe') {
             stripeForm.style.display = 'block';
@@ -74,7 +68,7 @@ document.querySelectorAll('.payment-option').forEach((option) => {
             stripeForm.style.display = 'none';
         }
 
-        // Update button text
+        // update button text
         updatePaymentButton();
     });
 });
@@ -88,14 +82,14 @@ function updatePaymentButton() {
     }
 }
 
-// Format card number input
+// format card number input
 document.getElementById('cardNumber')?.addEventListener('input', function (e) {
     let value = e.target.value.replace(/\s/g, '');
     let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
     e.target.value = formattedValue;
 });
 
-// Format expiry date input
+// format expiry date input
 document.getElementById('expiryDate')?.addEventListener('input', function (e) {
     let value = e.target.value.replace(/\D/g, '');
     if (value.length >= 2) {
@@ -104,12 +98,12 @@ document.getElementById('expiryDate')?.addEventListener('input', function (e) {
     e.target.value = value;
 });
 
-// CVV only numbers
+// cvv only numbers
 document.getElementById('cvv')?.addEventListener('input', function (e) {
     e.target.value = e.target.value.replace(/\D/g, '');
 });
 
-// Process Payment
+// process Payment
 function processPayment() {
     if (selectedPaymentMethod === 'stripe') {
         if (!validateCardForm()) {
@@ -117,12 +111,11 @@ function processPayment() {
         }
     }
 
-    // Show loading modal
+    // show loading modal
     document.getElementById('loadingModal').style.display = 'block';
 
-    // Simulate payment processing
     setTimeout(() => {
-        // In real app, you would call PayPal/Stripe API here
+        //
         completeEnrollment();
     }, 2500);
 }
@@ -147,7 +140,7 @@ function validateCardForm() {
         return false;
     }
 
-    // Validate expiry date is not in the past
+    // validate expiry date is not in the past
     const [month, year] = expiryDate.split('/');
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear() % 100;
@@ -187,10 +180,9 @@ function completeEnrollment() {
         localStorage.setItem('users', JSON.stringify(users));
     }
 
-    // Save payment record (optional - for admin tracking)
+    // save payment record (optional - for admin tracking)
     savePaymentRecord();
 
-    // Hide loading, show success
     document.getElementById('loadingModal').style.display = 'none';
     document.getElementById('successModal').style.display = 'block';
 }
@@ -216,7 +208,6 @@ function savePaymentRecord() {
 }
 
 function enrollDirectly() {
-    // For free courses, enroll directly without payment
     currentUser.courses.push(courseId);
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
@@ -228,12 +219,11 @@ function enrollDirectly() {
     }
 
     alert('Successfully enrolled in this free course!');
-    window.location.href = 'student/profile.html';
+    window.location.href = '../student/profile.html';
 }
 
 function goToCourse() {
-    window.location.href = 'student/profile.html';
+    window.location.href = '../student/profile.html';
 }
 
-// Initialize on page load
 loadCourseData();

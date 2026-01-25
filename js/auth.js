@@ -30,9 +30,7 @@ function generateId() {
     return 'user_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
 }
 
-// login
 function login(event) {
-    // Prevent form refresh
     if (event) {
         event.preventDefault();
     }
@@ -76,18 +74,6 @@ function login(event) {
     }, 500);
 }
 
-// function loginpassword() {
-//     let passwordregex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-//     if (!passwordregex.test(password)) {
-//         document.getElementById('passmsg').innerHTML =
-//             '*Password must be 8+ characters include uppercase lowercase and a number';
-//         return false;
-//     }
-//     document.getElementById('passmsg').innerHTML = '';
-//     return true;
-// }
-
-// signup validation functions
 function validatename() {
     let username = document.getElementById('username');
     name = username.value.trim();
@@ -142,9 +128,7 @@ function validatepassword() {
     return true;
 }
 
-// signup
 function signup(event) {
-    // Prevent form refresh
     if (event) {
         event.preventDefault();
     }
